@@ -75,22 +75,13 @@ export function ChatInterface() {
   }
 
   async function onSubmit(values: FormValues) {
-    if (!documentContent) {
-        toast({
-            variant: "destructive",
-            title: "No document provided.",
-            description: "Please upload a document before asking a question.",
-        });
-        return;
-    }
-
     const userMessage: Message = { id: `user-${Date.now()}`, text: values.question, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
     form.reset();
 
     const result = await getAnswer({
-        documentContent,
+        documentContent: documentContent,
         question: values.question
     });
 
@@ -120,7 +111,7 @@ export function ChatInterface() {
                  <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
                     <BrainCircuit className="w-16 h-16 mb-4" />
                     <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
-                    <p className="text-sm">Upload a document and start asking questions.</p>
+                    <p className="text-sm">You can start a conversation or upload a document to ask questions about.</p>
                 </div>
             )}
             {messages.map((message) => (
@@ -164,7 +155,7 @@ export function ChatInterface() {
                         <FormItem className="flex-1">
                             <FormControl>
                             <div className="relative">
-                               <Input placeholder="Ask a question about your document..." {...field} className="pr-12" />
+                               <Input placeholder={documentContent ? "Ask a question about your document..." : "Ask a question..."} {...field} className="pr-12" />
                                <label htmlFor="file-upload-button" className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-primary">
                                     <Paperclip className="h-5 w-5"/>
                                     <Input id="file-upload-button" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
