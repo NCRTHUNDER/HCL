@@ -14,18 +14,23 @@ const firebaseConfig: FirebaseOptions = {
 };
 
 let app;
-if (firebaseConfig.apiKey && !getApps().length) {
-    try {
+
+// This check is important to prevent re-initializing the app on every render.
+if (!getApps().length) {
+    // Check if all required config values are present
+    if (firebaseConfig.apiKey && firebaseConfig.projectId) {
         app = initializeApp(firebaseConfig);
-    } catch (e) {
-        console.error("Failed to initialize Firebase", e);
+    } else {
+        console.error("Firebase config is missing. Please check your .env.local file.");
+        // We are not initializing the app here, so auth and db will be null.
+        // The UI should handle this gracefully.
     }
 } else {
     app = getApp();
 }
 
-
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Conditionally get auth and db only if the app was initialized
+const auth = app ? getAuth(app) : null;
+const db = app ? getFirestore(app) : null;
 
 export { app, auth, db };

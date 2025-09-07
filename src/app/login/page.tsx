@@ -46,6 +46,17 @@ export default function LoginPage() {
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
+
+    if (!auth) {
+        toast({
+            variant: "destructive",
+            title: "Configuration Error",
+            description: "Firebase is not configured. Please check the console.",
+        });
+        setIsLoading(false);
+        return;
+    }
+
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       toast({
@@ -62,6 +73,9 @@ export default function LoginPage() {
           case 'auth/wrong-password':
           case 'auth/invalid-credential':
             errorMessage = "Invalid email or password. Please check your credentials and try again.";
+            break;
+          case 'auth/configuration-not-found':
+            errorMessage = "Firebase configuration is missing. Please check your environment variables.";
             break;
           case 'auth/invalid-api-key':
           case 'auth/missing-api-key':

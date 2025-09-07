@@ -46,6 +46,17 @@ export default function SignupPage() {
 
   async function onSubmit(values: FormValues) {
     setIsLoading(true);
+
+    if (!auth) {
+        toast({
+            variant: "destructive",
+            title: "Configuration Error",
+            description: "Firebase is not configured. Please check the console.",
+        });
+        setIsLoading(false);
+        return;
+    }
+
     try {
       await createUserWithEmailAndPassword(auth, values.email, values.password);
       toast({
@@ -59,6 +70,9 @@ export default function SignupPage() {
         switch (error.code) {
           case 'auth/email-already-in-use':
             errorMessage = "This email is already in use. Please log in or use a different email.";
+            break;
+          case 'auth/configuration-not-found':
+            errorMessage = "Firebase configuration is missing. Please check your environment variables.";
             break;
           case 'auth/invalid-api-key':
           case 'auth/missing-api-key':
