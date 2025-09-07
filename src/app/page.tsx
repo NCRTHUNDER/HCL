@@ -2,10 +2,19 @@ import { Bot, FileText, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center bg-background text-foreground">
+      <header className="w-full bg-transparent py-4 fixed top-0 z-10">
+        <div className="container mx-auto max-w-5xl px-4 flex items-center justify-between">
+            <h1 className="text-2xl font-bold tracking-tight text-primary font-headline">
+              Intituas AI
+            </h1>
+            <ThemeToggle />
+        </div>
+      </header>
       <main className="flex-1">
         <section className="w-full py-20 md:py-32 lg:py-40 bg-secondary">
           <div className="container px-4 md:px-6">

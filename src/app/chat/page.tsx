@@ -1,6 +1,7 @@
 import { DocuQueryForm } from "@/components/docu-query-form";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function ChatPage() {
   return (
@@ -14,6 +15,7 @@ export default function ChatPage() {
           <h1 className="text-2xl font-bold tracking-tight text-primary font-headline">
             Intituas AI
           </h1>
+          <ThemeToggle />
         </div>
       </header>
       
