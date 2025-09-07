@@ -17,34 +17,30 @@ import {
 } from '@/ai/flows/generate-suggestions';
 
 // Define a union type for the inputs to make handling them easier.
-type AnswerInput = 
-  | ({ type: 'document' } & GenerateAnswerFromDocumentInput)
-  | ({ type: 'general' } & GenerateAnswerInput);
+type AnswerInput = GenerateAnswerFromDocumentInput | GenerateAnswerInput;
 
 // Define a union type for the outputs.
-type AnswerOutput = 
-  | (GenerateAnswerFromDocumentOutput & { answer: string })
-  | (GenerateAnswerOutput & { answer: string });
+type AnswerOutput =
+  | GenerateAnswerFromDocumentOutput
+  | GenerateAnswerOutput;
+
+function isDocumentQuestion(
+  input: AnswerInput
+): input is GenerateAnswerFromDocumentInput {
+  return (input as GenerateAnswerFromDocumentInput).documentContent !== undefined;
+}
 
 export async function getAnswer(
   input: AnswerInput
-): Promise<AnswerOutput | { error: string }> {
+): Promise<AnswerOutput | {error: string}> {
   try {
-    let output;
-    if (input.type === 'document') {
+    if (isDocumentQuestion(input)) {
       // The input is for answering from a document.
-      const { type, ...docInput } = input;
-      output = await generateAnswerFromDocument(docInput);
+      return await generateAnswerFromDocument(input);
     } else {
       // The input is for a general question.
-      const { type, ...generalInput } = input;
-      output = await generateAnswer(generalInput);
+      return await generateAnswer(input);
     }
-
-    return {
-      ...output,
-      answer: output.answer,
-    };
   } catch (e: any) {
     console.error(e);
     return {
@@ -68,14 +64,25 @@ export async function getSuggestions(
   }
 }
 
-export async function submitContactForm(data: { name: string; email: string; message: string; }) {
+export async function submitContactForm(data: {
+  name: string;
+  email: string;
+  message: string;
+}) {
   try {
-    console.log("New contact form submission:", data);
+    console.log('New contact form submission:', data);
     // Here you would typically save to a database.
     // e.g., await db.collection('contacts').add(data);
-    return { success: true, message: "Thank you for your message! We'll get back to you soon." };
+    return {
+      success: true,
+      message: "Thank you for your message! We'll get back to you soon.",
+    };
   } catch (error) {
-    console.error("Error submitting contact form:", error);
-    return { success: false, message: "Sorry, there was an error submitting your form. Please try again later." };
+    console.error('Error submitting contact form:', error);
+    return {
+      success: false,
+      message:
+        'Sorry, there was an error submitting your form. Please try again later.',
+    };
   }
 }

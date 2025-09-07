@@ -139,8 +139,8 @@ export function StandaloneChat() {
     form.reset();
 
     const input = documentContent
-      ? { type: 'document' as const, documentContent: documentContent, question: values.question, researchMode: researchMode }
-      : { type: 'general' as const, question: values.question, researchMode: researchMode };
+      ? { documentContent: documentContent, question: values.question, researchMode: researchMode }
+      : { question: values.question, researchMode: researchMode };
     
     const result = await getAnswer(input);
 
