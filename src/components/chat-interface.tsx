@@ -101,9 +101,13 @@ export function ChatInterface() {
   }
 
   const fetchSuggestions = useCallback(async (docContent: string | null) => {
-    const result = await getSuggestions({ documentContent: docContent });
-    if (result.suggestions) {
-      setSuggestions(result.suggestions);
+    try {
+        const result = await getSuggestions({ documentContent: docContent });
+        if (result.suggestions) {
+          setSuggestions(result.suggestions);
+        }
+    } catch (e) {
+        console.error("Failed to fetch suggestions", e);
     }
   }, []);
 

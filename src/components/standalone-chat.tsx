@@ -104,7 +104,7 @@ export function StandaloneChat() {
     try {
         const result = await getSuggestions({ documentContent: docContent });
         if (result.suggestions) {
-        setSuggestions(result.suggestions);
+          setSuggestions(result.suggestions);
         }
     } catch (e) {
         // Don't show toast for suggestion errors
@@ -113,7 +113,10 @@ export function StandaloneChat() {
   }, []);
 
   useEffect(() => {
-    fetchSuggestions(null); // Initial general suggestions
+    // We wrap this in a timeout to avoid a race condition during the initial render.
+    setTimeout(() => {
+      fetchSuggestions(null); // Initial general suggestions
+    }, 1);
   }, [fetchSuggestions]);
   
   useEffect(() => {
