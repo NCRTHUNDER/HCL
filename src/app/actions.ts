@@ -6,7 +6,7 @@ import {
   GenerateAnswerFromDocumentInput,
 } from '@/ai/flows/generate-answer-from-document';
 import { generateAnswer, GenerateAnswerInput } from '@/ai/flows/generate-answer';
-import { generateMindMap, GenerateMindMapInput, GenerateMindMapOutput } from '@/ai/flows/generate-mind-map';
+
 
 export async function getAnswer(
   input: GenerateAnswerFromDocumentInput
@@ -28,18 +28,5 @@ export async function getAnswer(
   } catch (e: any) {
     console.error(e);
     return { error: 'Sorry, there was an issue generating an answer. Please check your input and try again.' };
-  }
-}
-
-
-export async function getMindMap(
-  input: GenerateMindMapInput
-): Promise<GenerateMindMapOutput | { error: string }> {
-  try {
-    const output = await generateMindMap(input);
-    return output;
-  } catch (e: any) {
-    console.error(e);
-    return { error: 'Sorry, there was an issue generating the mind map. Please try again.' };
   }
 }

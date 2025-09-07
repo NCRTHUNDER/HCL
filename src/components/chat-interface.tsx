@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, FileUp, X, Share2, Bot } from "lucide-react";
+import { BrainCircuit, Loader2, Paperclip, Send, FileUp, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,13 +18,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { getAnswer, getMindMap } from "@/app/actions";
+import { getAnswer } from "@/app/actions";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import type { MindMapNode } from "@/ai/flows/generate-mind-map";
-import { MindMapDisplay } from "./mind-map-display";
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -36,7 +34,6 @@ interface Message {
   id: string;
   sender: "user" | "ai";
   text?: string;
-  mindMap?: MindMapNode;
 }
 
 export function ChatInterface() {
@@ -109,40 +106,6 @@ export function ChatInterface() {
     }
   }
 
-  const handleGenerateMindMap = async () => {
-    if (!documentContent) {
-        toast({
-            variant: "destructive",
-            title: "No document uploaded",
-            description: "Please upload a document first to generate a mind map.",
-        });
-        return;
-    }
-    
-    const thinkingMessage: Message = { id: `ai-thinking-${Date.now()}`, sender: "ai", text: "Generating mind map..."};
-    setMessages((prev) => [...prev, thinkingMessage]);
-    setIsLoading(true);
-
-    const result = await getMindMap({ documentContent });
-    
-    // Remove the "thinking" message
-    setMessages((prev) => prev.filter(m => m.id !== thinkingMessage.id));
-    setIsLoading(false);
-
-    if("error" in result) {
-        toast({
-            variant: "destructive",
-            title: "Mind Map Generation Failed",
-            description: result.error,
-        });
-        const aiErrorMessage: Message = { id: `ai-error-${Date.now()}`, text: "Sorry, I couldn't generate the mind map.", sender: "ai"};
-        setMessages((prev) => [...prev, aiErrorMessage]);
-    } else {
-        const aiMessage: Message = { id: `ai-mindmap-${Date.now()}`, mindMap: result.mindMap, sender: "ai" };
-        setMessages((prev) => [...prev, aiMessage]);
-    }
-  }
-
   return (
     <div className="space-y-4">
       <Card className="shadow-lg bg-background flex flex-col h-[60vh]">
@@ -165,7 +128,6 @@ export function ChatInterface() {
                       )}
                       <div className={`rounded-lg px-4 py-2 max-w-[80%] ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
                           {message.text && <p className="text-sm whitespace-pre-wrap">{message.text}</p>}
-                          {message.mindMap && <MindMapDisplay node={message.mindMap} />}
                       </div>
                        {message.sender === 'user' && (
                           <Avatar className="w-8 h-8">
@@ -191,12 +153,6 @@ export function ChatInterface() {
           </ScrollArea>
           <div className="mt-auto pt-4 border-t">
             <div className="flex items-center justify-between mb-2">
-                {documentContent && (
-                    <Button variant="outline" size="sm" onClick={handleGenerateMindMap} disabled={isLoading}>
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Generate Mind Map
-                    </Button>
-                )}
                 <div className="flex items-center space-x-2 ml-auto">
                     <Switch id="research-mode" checked={researchMode} onCheckedChange={setResearchMode} />
                     <Label htmlFor="research-mode">Research Mode</Label>
