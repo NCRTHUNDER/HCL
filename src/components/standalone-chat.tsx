@@ -276,10 +276,6 @@ export function StandaloneChat() {
                 </div>
                 <Input id="file-upload-button-widget" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
             </label>
-            <div className="flex items-center space-x-2">
-                <Switch id="research-mode-widget" checked={researchMode} onCheckedChange={setResearchMode} />
-                <Label htmlFor="research-mode-widget" className="text-xs">Research</Label>
-            </div>
         </div>
          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">

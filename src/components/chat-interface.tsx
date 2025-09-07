@@ -271,10 +271,6 @@ export function ChatInterface() {
                 </div>
                 <Input id="file-upload-button" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
             </label>
-            <div className="flex items-center space-x-2">
-                <Switch id="research-mode" checked={researchMode} onCheckedChange={setResearchMode} />
-                <Label htmlFor="research-mode" className="text-sm">Research Mode</Label>
-            </div>
         </div>
          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
@@ -286,18 +282,6 @@ export function ChatInterface() {
                         <FormControl>
                             <div className="relative">
                                 <Input placeholder={documentContent ? "Ask about your document or start with @ai for general questions..." : "Ask me anything..."} {...field} />
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger asChild>
-                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs p-1 rounded-sm bg-secondary cursor-help hidden md:block">
-                                                @ai
-                                            </div>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>Start your message with <span className="font-mono bg-muted p-1 rounded">@ai</span> to ask a general question.</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
                             </div>
                         </FormControl>
                         <FormMessage />
