@@ -21,6 +21,8 @@ import { useToast } from "@/hooks/use-toast";
 import { getAnswer } from "@/app/actions";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -40,6 +42,7 @@ export function ChatInterface() {
   const { toast } = useToast();
   const [documentContent, setDocumentContent] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [researchMode, setResearchMode] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -82,7 +85,8 @@ export function ChatInterface() {
 
     const result = await getAnswer({
         documentContent: documentContent,
-        question: values.question
+        question: values.question,
+        researchMode: researchMode,
     });
 
     setIsLoading(false);
@@ -148,6 +152,12 @@ export function ChatInterface() {
             </div>
           </ScrollArea>
           <div className="mt-auto pt-4 border-t">
+            <div className="flex items-center justify-end mb-2">
+                <div className="flex items-center space-x-2">
+                    <Switch id="research-mode" checked={researchMode} onCheckedChange={setResearchMode} />
+                    <Label htmlFor="research-mode">Research Mode</Label>
+                </div>
+            </div>
              <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
                     <FormField

@@ -13,6 +13,7 @@ import {z} from 'genkit';
 const GenerateAnswerFromDocumentInputSchema = z.object({
   question: z.string().describe('The question to answer about the document.'),
   documentContent: z.string().describe('The content of the document to answer the question from.'),
+  researchMode: z.boolean().optional().describe('Whether to provide a more detailed, research-oriented answer.'),
 });
 export type GenerateAnswerFromDocumentInput = z.infer<
   typeof GenerateAnswerFromDocumentInputSchema
@@ -36,6 +37,9 @@ const generateAnswerFromDocumentPrompt = ai.definePrompt({
   input: {schema: GenerateAnswerFromDocumentInputSchema},
   output: {schema: GenerateAnswerFromDocumentOutputSchema},
   prompt: `You are an expert at answering questions based on document content.
+  {{#if researchMode}}
+  You are in research mode. Provide a detailed, in-depth, and comprehensive answer.
+  {{/if}}
 
   Answer the following question based on the content of the document provided.
 

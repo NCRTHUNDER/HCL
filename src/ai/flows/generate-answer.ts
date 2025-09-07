@@ -12,6 +12,7 @@ import {z} from 'genkit';
 
 const GenerateAnswerInputSchema = z.object({
   question: z.string().describe('The question to answer.'),
+  researchMode: z.boolean().optional().describe('Whether to provide a more detailed, research-oriented answer.'),
 });
 export type GenerateAnswerInput = z.infer<typeof GenerateAnswerInputSchema>;
 
@@ -30,7 +31,12 @@ const generateAnswerPrompt = ai.definePrompt({
   name: 'generateAnswerPrompt',
   input: {schema: GenerateAnswerInputSchema},
   output: {schema: GenerateAnswerOutputSchema},
-  prompt: `You are a helpful AI assistant. Answer the following question.
+  prompt: `You are a helpful AI assistant.
+  {{#if researchMode}}
+  You are in research mode. Provide a detailed, in-depth, and comprehensive answer.
+  {{/if}}
+  
+  Answer the following question.
 
 Question: {{{question}}}
 
