@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, FileUp, X } from "lucide-react";
-
+import { BrainCircuit, Loader2, Paperclip, Send, FileUp, X, User, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { getAnswer } from "@/app/actions";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -23,6 +21,9 @@ import { ScrollArea } from "./ui/scroll-area";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { useAuth } from "@/hooks/use-auth";
+import { Card, CardContent } from "./ui/card";
+import { cn } from "@/lib/utils";
+
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -44,6 +45,14 @@ export function ChatInterface() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [researchMode, setResearchMode] = useState(false);
   const { user } = useAuth();
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
+    }
+  }, [messages])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -61,8 +70,8 @@ export function ChatInterface() {
         const content = event.target?.result as string;
         setDocumentContent(content);
         toast({
-            title: "File uploaded",
-            description: `${file.name} has been loaded. You can now ask questions about it.`,
+            title: "File Uploaded",
+            description: `${file.name} is ready for questions.`,
         });
       };
       reader.readAsText(file);
@@ -73,8 +82,8 @@ export function ChatInterface() {
     setFileName(null);
     setDocumentContent(null);
     toast({
-        title: "File removed",
-        description: "The document has been removed.",
+        title: "File Removed",
+        description: "The document has been removed from the chat.",
     });
   }
 
@@ -109,117 +118,100 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="space-y-4">
-      <Card className="shadow-lg bg-background flex flex-col h-[60vh]">
-        <CardContent className="pt-6 flex-1 flex flex-col gap-4 overflow-hidden">
-          <ScrollArea className="flex-1 pr-4">
-            <div className="space-y-4">
-              {messages.length === 0 && !isLoading && (
-                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground pt-16">
-                      <BrainCircuit className="w-16 h-16 mb-4" />
-                      <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
-                      <p className="text-sm">You can start a conversation or upload a document to ask questions about.</p>
-                  </div>
-              )}
-              {messages.map((message) => (
-                  <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
-                      {message.sender === 'ai' && (
-                          <Avatar className="w-8 h-8">
-                              <AvatarFallback>AI</AvatarFallback>
-                          </Avatar>
-                      )}
-                      <div className={`rounded-lg px-4 py-2 max-w-[80%] ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                          {message.text && <p className="text-sm whitespace-pre-wrap">{message.text}</p>}
-                      </div>
-                       {message.sender === 'user' && (
-                          <Avatar className="w-8 h-8">
-                              <AvatarFallback>U</AvatarFallback>
-                          </Avatar>
-                      )}
-                  </div>
-              ))}
-              {isLoading && messages[messages.length -1]?.sender !== 'ai' && (
-                <div className="flex items-start gap-3">
-                   <Avatar className="w-8 h-8">
-                      <AvatarFallback>AI</AvatarFallback>
-                   </Avatar>
-                  <div className="rounded-lg px-4 py-2 max-w-[80%] bg-secondary">
-                      <div className="flex items-center gap-2">
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          <p className="text-sm">Thinking...</p>
-                      </div>
-                  </div>
+    <div className="flex flex-col h-full w-full">
+      <ScrollArea className="flex-1 pr-4 -mr-4" ref={scrollAreaRef}>
+        <div className="space-y-6 pb-4">
+          {messages.length === 0 && !isLoading && (
+               <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground pt-24">
+                  <BrainCircuit className="w-16 h-16 mb-4 text-primary" />
+                  <h3 className="text-xl font-semibold">Welcome to Intituas AI</h3>
+                  <p className="text-base">Start a conversation below or upload a document to begin.</p>
+              </div>
+          )}
+          {messages.map((message) => (
+            <div key={message.id} className={cn("flex items-start gap-3", message.sender === 'user' ? 'justify-end' : '')}>
+                {message.sender === 'ai' && (
+                    <Avatar className="w-8 h-8 border">
+                        <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+                    </Avatar>
+                )}
+                <div className={cn("rounded-lg px-4 py-2 max-w-[80%]", message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                    {message.text && <p className="text-sm whitespace-pre-wrap">{message.text}</p>}
                 </div>
-              )}
+                 {message.sender === 'user' && (
+                    <Avatar className="w-8 h-8 border">
+                        <AvatarFallback><User className="h-5 w-5"/></AvatarFallback>
+                    </Avatar>
+                )}
             </div>
-          </ScrollArea>
-          <div className="mt-auto pt-4 border-t">
-            <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center space-x-2 ml-auto">
-                    <Switch id="research-mode" checked={researchMode} onCheckedChange={setResearchMode} />
-                    <Label htmlFor="research-mode">Research Mode</Label>
-                </div>
+          ))}
+          {isLoading && messages[messages.length -1]?.sender !== 'ai' && (
+            <div className="flex items-start gap-3">
+               <Avatar className="w-8 h-8 border">
+                  <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
+               </Avatar>
+              <div className="rounded-lg px-4 py-2 max-w-[80%] bg-secondary">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <p className="text-sm">Thinking...</p>
+                  </div>
+              </div>
             </div>
-             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
-                    <FormField
-                        control={form.control}
-                        name="question"
-                        render={({ field }) => (
-                        <FormItem className="flex-1">
-                            <FormControl>
-                            <div className="relative">
-                               <Input placeholder={documentContent ? "Ask a question about your document..." : "Ask a question..."} {...field} className="pr-12" />
-                               <label htmlFor="file-upload-button" className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-primary">
-                                    <Paperclip className="h-5 w-5"/>
-                                    <Input id="file-upload-button" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
-                               </label>
-                            </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                        )}
-                    />
-                    <Button type="submit" disabled={isLoading} size="icon">
-                        <Send className="h-5 w-5" />
-                    </Button>
-                </form>
-            </Form>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {!fileName && (
-        <div className="relative border-2 border-dashed border-muted-foreground/50 rounded-lg p-8 flex flex-col items-center justify-center text-center">
-            <FileUp className="w-12 h-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Upload Your Document</h3>
-            <p className="text-sm text-muted-foreground mb-4">Supported formats: TXT, PDF, PPTX, DOCX</p>
-            <Button asChild>
-                <label htmlFor="file-upload-main">
-                    Browse Files
-                    <Input id="file-upload-main" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
-                </label>
-            </Button>
+          )}
         </div>
-      )}
-
-
-      {fileName && (
-        <Card className="shadow-lg bg-background">
-            <CardContent className="pt-6 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <Paperclip className="h-5 w-5 text-primary" />
-                    <div>
-                        <p className="font-semibold">{fileName}</p>
-                        <p className="text-sm text-muted-foreground">Ready to be queried.</p>
+      </ScrollArea>
+      
+      <div className="mt-auto pt-4 border-t bg-background">
+         {fileName && (
+            <Card className="mb-4 bg-secondary border-dashed">
+                <CardContent className="p-3 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <Paperclip className="h-5 w-5 text-primary flex-shrink-0" />
+                        <div className="flex-grow">
+                            <p className="font-semibold text-sm truncate">{fileName}</p>
+                            <p className="text-xs text-muted-foreground">File is ready to be queried.</p>
+                        </div>
                     </div>
+                    <Button variant="ghost" size="icon" onClick={removeFile}>
+                        <X className="h-5 w-5" />
+                    </Button>
+                </CardContent>
+            </Card>
+        )}
+
+        <div className="flex items-center justify-between mb-2">
+             <label htmlFor="file-upload-button" className="cursor-pointer">
+                <div className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <Paperclip className="h-5 w-5"/>
+                    <span className="text-sm font-medium">{documentContent ? "Change Document" : "Attach Document"}</span>
                 </div>
-                <Button variant="ghost" size="icon" onClick={removeFile}>
-                    <X className="h-5 w-5" />
+                <Input id="file-upload-button" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
+            </label>
+            <div className="flex items-center space-x-2">
+                <Switch id="research-mode" checked={researchMode} onCheckedChange={setResearchMode} />
+                <Label htmlFor="research-mode" className="text-sm">Research Mode</Label>
+            </div>
+        </div>
+         <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
+                <FormField
+                    control={form.control}
+                    name="question"
+                    render={({ field }) => (
+                    <FormItem className="flex-1">
+                        <FormControl>
+                            <Input placeholder={documentContent ? "Ask a question about your document..." : "Ask me anything..."} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                <Button type="submit" disabled={isLoading} size="icon" aria-label="Send message">
+                    <Send className="h-5 w-5" />
                 </Button>
-            </CardContent>
-        </Card>
-      )}
+            </form>
+        </Form>
+      </div>
     </div>
   );
 }
