@@ -1,4 +1,4 @@
-import { Bot, FileText, ArrowRight, LogIn, Share2, MessageSquare } from "lucide-react";
+import { FileText, ArrowRight, LogIn, Share2, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -9,12 +9,17 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="w-full px-4 md:px-6 py-4 flex items-center justify-between fixed top-0 z-50 bg-background/80 backdrop-blur-sm">
         <Link href="/" className="flex items-center gap-2">
-          <Bot className="h-6 w-6 text-primary" />
+          
           <h1 className="text-xl font-bold tracking-tight font-headline">
             Intituas AI
           </h1>
         </Link>
         <div className="flex items-center gap-4">
+          <Link href="/contact">
+            <Button variant="ghost">
+              Contact
+            </Button>
+          </Link>
           <Link href="/login">
             <Button variant="ghost">
               Login
@@ -90,7 +95,7 @@ export default function Home() {
               <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
                  <div className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <Bot className="h-8 w-8" />
+                      <MessageSquare className="h-8 w-8" />
                     </div>
                 </div>
                 <h3 className="text-xl font-bold">2. Ask Anything</h3>
