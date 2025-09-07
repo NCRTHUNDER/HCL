@@ -34,18 +34,18 @@ export default function Home() {
       <main className="flex-1">
         <section className="w-full pt-32 pb-20 md:pt-48 md:pb-24 lg:pt-56 lg:pb-32">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 xl:gap-24 items-center">
-              <div className="flex flex-col justify-center space-y-4">
+            <div className="grid gap-6 items-center">
+              <div className="flex flex-col justify-center space-y-4 text-center">
                 <div className="space-y-4">
                    <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm">AI-Powered Analysis</div>
                   <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl font-headline">
                     Unlock Insights from Your Documents
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
                     Intituas AI transforms your documents into interactive knowledge bases. Ask questions in natural language and get instant, intelligent answers.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex justify-center flex-col gap-2 min-[400px]:flex-row">
                   <Link href="/chat">
                     <Button size="lg">
                       Try the Demo
@@ -54,14 +54,6 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <Image
-                alt="AI analyzing documents"
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full"
-                height="310"
-                src="https://picsum.photos/550/310"
-                width="550"
-                data-ai-hint="futuristic document"
-              />
             </div>
           </div>
         </section>
