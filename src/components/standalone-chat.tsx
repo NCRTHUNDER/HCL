@@ -135,12 +135,9 @@ export function StandaloneChat() {
     setSuggestions([]);
     form.reset();
 
-    const isDirectQuery = values.question.startsWith('@ai');
-    const question = isDirectQuery ? values.question.substring(3).trim() : values.question;
-    
     const result = await getAnswer({
-        documentContent: isDirectQuery ? null : documentContent,
-        question: question,
+        documentContent: documentContent,
+        question: values.question,
     });
 
     setIsLoading(false);
@@ -307,7 +304,7 @@ export function StandaloneChat() {
                     <FormItem className="flex-1">
                         <FormControl>
                             <div className="relative">
-                                <Input placeholder="Ask anything..." {...field} />
+                                <Input placeholder="Ask anything..." {...field} className="text-sm" />
                             </div>
                         </FormControl>
                         <FormMessage />
@@ -323,5 +320,3 @@ export function StandaloneChat() {
     </div>
   );
 }
-
-    

@@ -130,12 +130,9 @@ export function ChatInterface() {
     setSuggestions([]);
     form.reset();
 
-    const isDirectQuery = values.question.startsWith('@ai');
-    const question = isDirectQuery ? values.question.substring(3).trim() : values.question;
-    
     const result = await getAnswer({
-        documentContent: isDirectQuery ? null : documentContent,
-        question: question,
+        documentContent: documentContent,
+        question: values.question,
     });
 
     setIsLoading(false);
@@ -292,6 +289,19 @@ export function ChatInterface() {
                 </div>
                 <Input id="file-upload-button" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
             </label>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <div className="text-xs text-muted-foreground flex items-center gap-1.5 cursor-help">
+                            <Sparkles className="h-4 w-4" />
+                            <span>Use @ai for general questions</span>
+                        </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>Prepend your question with "@ai" to ask a general question without document context.</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         </div>
          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
@@ -318,5 +328,3 @@ export function ChatInterface() {
     </div>
   );
 }
-
-    
