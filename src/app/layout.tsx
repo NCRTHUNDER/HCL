@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'DocuQuery',
+  title: 'Intituas AI',
   description: 'Intelligent Q&A for your documents.',
 };
 
