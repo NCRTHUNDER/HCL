@@ -29,6 +29,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Skeleton } from "./ui/skeleton";
+import { Switch } from "./ui/switch";
+import { Label } from "./ui/label";
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -51,6 +53,7 @@ export function StandaloneChat() {
   const [documentContent, setDocumentContent] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [researchMode, setResearchMode] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<FormValues>({
@@ -138,6 +141,7 @@ export function StandaloneChat() {
     const result = await getAnswer({
         documentContent: documentContent,
         question: values.question,
+        researchMode: researchMode,
     });
 
     setIsLoading(false);
@@ -294,6 +298,10 @@ export function StandaloneChat() {
                 </div>
                 <Input id="file-upload-button-widget" type="file" className="sr-only" onChange={handleFileChange} accept=".txt,.pdf,.ppt,.pptx,.doc,.docx" />
             </label>
+            <div className="flex items-center space-x-2">
+              <Switch id="research-mode-widget" checked={researchMode} onCheckedChange={setResearchMode} />
+              <Label htmlFor="research-mode-widget" className="text-xs">Research</Label>
+            </div>
         </div>
          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
