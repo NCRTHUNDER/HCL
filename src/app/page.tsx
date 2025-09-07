@@ -172,6 +172,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link>
+                <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">Contact</Link>
             </div>
         </div>
       </footer>

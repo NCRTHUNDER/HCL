@@ -58,3 +58,15 @@ export async function getSuggestions(
     };
   }
 }
+
+export async function submitContactForm(data: { name: string; email: string; message: string; }) {
+  try {
+    console.log("New contact form submission:", data);
+    // Here you would typically save to a database.
+    // e.g., await db.collection('contacts').add(data);
+    return { success: true, message: "Thank you for your message! We'll get back to you soon." };
+  } catch (error) {
+    console.error("Error submitting contact form:", error);
+    return { success: false, message: "Sorry, there was an error submitting your form. Please try again later." };
+  }
+}
