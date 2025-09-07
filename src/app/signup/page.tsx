@@ -55,6 +55,7 @@ export default function SignupPage() {
       router.push("/dashboard");
     } catch (error: any) {
        let errorMessage = "An unexpected error occurred. Please try again.";
+      // Handle specific Firebase authentication errors
       if (error.code === 'auth/email-already-in-use') {
         errorMessage = "This email is already in use. Please log in or use a different email.";
       } else if (error.code === 'auth/invalid-api-key') {

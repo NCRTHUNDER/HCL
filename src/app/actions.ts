@@ -12,8 +12,9 @@ import { collection, addDoc, serverTimestamp, query, where, orderBy, limit, getD
 async function saveSearchHistory(userId: string, question: string, answer: string) {
     if (!userId) return;
 
-    // Add new history
     const historyCollection = collection(db, 'searchHistory');
+    
+    // Add new history entry
     await addDoc(historyCollection, {
         userId,
         question,
@@ -21,7 +22,7 @@ async function saveSearchHistory(userId: string, question: string, answer: strin
         createdAt: serverTimestamp(),
     });
 
-    // Check if history exceeds 5 items
+    // Enforce a limit of 5 history items
     const q = query(
         historyCollection,
         where('userId', '==', userId),
@@ -42,14 +43,8 @@ async function saveSearchHistory(userId: string, question: string, answer: strin
 
 
 export async function getAnswer(
-  input: GenerateAnswerFromDocumentInput & { userId?: string }
-): Promise<{ answer: string } | { error: string }>;
-export async function getAnswer(
-  input: GenerateAnswerInput & { userId?: string }
-): Promise<{ answer: string } | { error: string }>;
-export async function getAnswer(
   input: (GenerateAnswerFromDocumentInput | GenerateAnswerInput) & { userId?: string }
-): Promise<{ answer:string } | { error: string }> {
+): Promise<{ answer: string } | { error: string }> {
   try {
     let output;
     if ('documentContent' in input && input.documentContent) {

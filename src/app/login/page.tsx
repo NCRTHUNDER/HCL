@@ -55,6 +55,7 @@ export default function LoginPage() {
       router.push("/dashboard");
     } catch (error: any) {
       let errorMessage = "An unexpected error occurred. Please try again.";
+      // Handle specific Firebase authentication errors
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
         errorMessage = "Invalid email or password. Please check your credentials and try again.";
       } else if (error.code === 'auth/invalid-api-key') {
