@@ -1,10 +1,11 @@
+
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote } from "lucide-react";
+import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,8 +19,6 @@ import { useToast } from "@/hooks/use-toast";
 import { getAnswer, getSuggestions } from "@/app/actions";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
-import { Switch } from "./ui/switch";
-import { Label } from "./ui/label";
 import { Card, CardContent } from "./ui/card";
 import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
@@ -29,6 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Skeleton } from "./ui/skeleton";
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -50,7 +50,6 @@ export function StandaloneChat() {
   const { toast } = useToast();
   const [documentContent, setDocumentContent] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [researchMode, setResearchMode] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -119,6 +118,16 @@ export function StandaloneChat() {
     onSubmit({ question: suggestion });
   }
 
+  const clearChat = () => {
+    setMessages([]);
+    setSuggestions([]);
+    fetchSuggestions(documentContent);
+    toast({
+        title: "Chat Cleared",
+        description: "The conversation has been reset.",
+    });
+  }
+
   async function onSubmit(values: FormValues) {
     const userMessage: Message = { id: `user-${Date.now()}`, text: values.question, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
@@ -132,7 +141,7 @@ export function StandaloneChat() {
     const result = await getAnswer({
         documentContent: isDirectQuery ? null : documentContent,
         question: question,
-        researchMode: researchMode,
+        researchMode: false,
     });
 
     setIsLoading(false);
@@ -162,11 +171,21 @@ export function StandaloneChat() {
 
   return (
     <div className="flex flex-col h-full w-full p-4 pt-0">
+       {messages.length > 0 && (
+          <div className="flex items-center justify-end my-2">
+              <Button variant="outline" size="sm" onClick={clearChat} className="gap-1.5 text-xs h-7">
+                  <Trash2 className="h-3.5 w-3.5"/>
+                  Clear
+              </Button>
+          </div>
+      )}
       <ScrollArea className="flex-1 pr-4 -mr-4" ref={scrollAreaRef}>
         <div className="space-y-6 pb-4">
           {messages.length === 0 && !isLoading && (
                <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground pt-12">
-                  <BrainCircuit className="w-12 h-12 mb-4 text-primary" />
+                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4">
+                        <BrainCircuit className="w-10 h-10 text-primary" />
+                    </div>
                   <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
                   <p className="text-sm">Start a conversation below or upload a document to begin.</p>
               </div>
@@ -230,10 +249,13 @@ export function StandaloneChat() {
                <Avatar className="w-8 h-8 border">
                   <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
                </Avatar>
-              <div className="rounded-lg px-3 py-2 max-w-[85%] bg-secondary">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <p className="text-sm">Thinking...</p>
+              <div className="rounded-lg px-3 py-2 max-w-[85%] bg-secondary w-full">
+                  <div className="flex items-start gap-3">
+                      <Skeleton className="h-5 w-5 rounded-full" />
+                      <div className="space-y-2 flex-1">
+                          <Skeleton className="h-3 w-4/5" />
+                          <Skeleton className="h-3 w-3/5" />
+                      </div>
                   </div>
               </div>
             </div>
