@@ -8,7 +8,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Bot, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -58,7 +58,7 @@ export default function SignupPage() {
       if (error.code === 'auth/email-already-in-use') {
         errorMessage = "This email is already in use. Please log in or use a different email.";
       } else if (error.code === 'auth/invalid-api-key') {
-        errorMessage = "Invalid Firebase API Key. Please check your configuration.";
+        errorMessage = "Invalid Firebase API Key. Please check your configuration in your .env.local file.";
       }
        toast({
         variant: "destructive",

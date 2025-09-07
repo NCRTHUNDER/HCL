@@ -8,7 +8,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Bot, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -58,7 +58,7 @@ export default function LoginPage() {
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
         errorMessage = "Invalid email or password. Please check your credentials and try again.";
       } else if (error.code === 'auth/invalid-api-key') {
-        errorMessage = "Invalid Firebase API Key. Please check your configuration.";
+        errorMessage = "Invalid Firebase API Key. Please check your configuration in your .env.local file.";
       }
       toast({
         variant: "destructive",
