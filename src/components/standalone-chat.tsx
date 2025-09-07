@@ -199,19 +199,7 @@ export function StandaloneChat() {
   }
 
   return (
-    <div 
-      className="flex flex-col h-full w-full p-4 pt-0 relative"
-      onDragEnter={handleDragEnter}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-    >
-      {isDragging && (
-        <div className="absolute inset-0 bg-secondary/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary">
-          <Upload className="h-12 w-12 text-primary mb-4" />
-          <p className="text-md font-semibold">Drop document here</p>
-        </div>
-      )}
+    <div className="flex flex-col h-full w-full p-4 pt-0 relative">
        {messages.length > 0 && (
           <div className="flex items-center justify-end my-2">
               <Button variant="outline" size="sm" onClick={clearChat} className="gap-1.5 text-xs h-7">
@@ -223,12 +211,19 @@ export function StandaloneChat() {
       <ScrollArea className="flex-1 pr-4 -mr-4" ref={scrollAreaRef}>
         <div className="space-y-6 pb-4">
           {messages.length === 0 && !isLoading && (
-               <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground pt-12">
-                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 mb-4">
-                        <BrainCircuit className="w-10 h-10 text-primary" />
-                    </div>
+               <div
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop} 
+                className={cn(
+                  "flex flex-col items-center justify-center rounded-lg border-2 border-dashed bg-secondary text-center text-muted-foreground p-8 min-h-[calc(60vh-250px)] transition-colors",
+                  isDragging ? "border-primary bg-primary/10" : ""
+                )}
+               >
+                   <Upload className="w-10 h-10 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
-                  <p className="text-sm">Start a conversation below or upload a document to begin.</p>
+                  <p className="text-sm mt-1">Drag & drop a document here or start a conversation below.</p>
               </div>
           )}
           {messages.map((message) => (

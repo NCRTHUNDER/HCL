@@ -194,19 +194,7 @@ export function ChatInterface() {
   }
 
   return (
-    <div 
-      className="flex flex-col h-full w-full relative"
-      onDragEnter={handleDragEnter}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
-    >
-       {isDragging && (
-        <div className="absolute inset-0 bg-secondary/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary">
-          <Upload className="h-16 w-16 text-primary mb-4" />
-          <p className="text-lg font-semibold">Drop your document here</p>
-        </div>
-      )}
+    <div className="flex flex-col h-full w-full relative">
       {messages.length > 0 && (
           <div className="flex items-center justify-end mb-4">
               <Button variant="outline" size="sm" onClick={clearChat} className="gap-2">
@@ -218,12 +206,19 @@ export function ChatInterface() {
       <ScrollArea className="flex-1 pr-4 -mr-4" ref={scrollAreaRef}>
         <div className="space-y-6 pb-4">
           {messages.length === 0 && !isLoading && (
-               <div className="flex flex-col items-center justify-center h-full rounded-lg border-2 border-dashed bg-secondary text-center text-muted-foreground p-12 pt-24 min-h-[400px]">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
-                    <BrainCircuit className="w-12 h-12 text-primary" />
-                  </div>
+               <div
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop} 
+                className={cn(
+                  "flex flex-col items-center justify-center rounded-lg border-2 border-dashed bg-secondary text-center text-muted-foreground p-12 min-h-[400px] transition-colors",
+                  isDragging ? "border-primary bg-primary/10" : ""
+                )}
+               >
+                  <Upload className="w-12 h-12 text-muted-foreground mb-4" />
                   <h3 className="text-2xl font-semibold tracking-tight">Welcome to Intituas AI</h3>
-                  <p className="text-base mt-2">Start a conversation by typing below or upload a document to begin.</p>
+                  <p className="text-base mt-2">Drag & drop a document here, or start a conversation by typing below.</p>
               </div>
           )}
           {messages.map((message) => (
