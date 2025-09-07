@@ -3,7 +3,6 @@
 
 import * as admin from 'firebase-admin';
 import { getApps, getApp, initializeApp } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
 
 let app;
 if (!getApps().length) {
@@ -18,6 +17,4 @@ if (!getApps().length) {
     app = getApp();
 }
 
-const db = getFirestore(app);
-
-export { app, db };
+export { app };
