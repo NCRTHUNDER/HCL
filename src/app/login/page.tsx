@@ -56,10 +56,21 @@ export default function LoginPage() {
     } catch (error: any) {
       let errorMessage = "An unexpected error occurred. Please try again.";
       // Handle specific Firebase authentication errors
-      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        errorMessage = "Invalid email or password. Please check your credentials and try again.";
-      } else if (error.code === 'auth/invalid-api-key') {
-        errorMessage = "Invalid Firebase API Key. Please check your configuration in your .env.local file.";
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+          case 'auth/invalid-credential':
+            errorMessage = "Invalid email or password. Please check your credentials and try again.";
+            break;
+          case 'auth/invalid-api-key':
+          case 'auth/missing-api-key':
+             errorMessage = "Firebase API Key is invalid. Please check your project configuration.";
+             break;
+          default:
+             errorMessage = `An error occurred: ${error.message}`;
+             break;
+        }
       }
       toast({
         variant: "destructive",

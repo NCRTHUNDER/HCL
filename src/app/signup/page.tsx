@@ -55,11 +55,22 @@ export default function SignupPage() {
       router.push("/dashboard");
     } catch (error: any) {
        let errorMessage = "An unexpected error occurred. Please try again.";
-      // Handle specific Firebase authentication errors
-      if (error.code === 'auth/email-already-in-use') {
-        errorMessage = "This email is already in use. Please log in or use a different email.";
-      } else if (error.code === 'auth/invalid-api-key') {
-        errorMessage = "Invalid Firebase API Key. Please check your configuration in your .env.local file.";
+      if (error.code) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = "This email is already in use. Please log in or use a different email.";
+            break;
+          case 'auth/invalid-api-key':
+          case 'auth/missing-api-key':
+            errorMessage = "Firebase API Key is invalid. Please check your project configuration.";
+            break;
+          case 'auth/weak-password':
+            errorMessage = "The password is too weak. Please use a stronger password.";
+            break;
+          default:
+            errorMessage = `An error occurred: ${error.message}`;
+            break;
+        }
       }
        toast({
         variant: "destructive",
