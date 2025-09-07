@@ -5,17 +5,21 @@
  * - generateMindMap - A function that takes document content and returns a mind map structure.
  * - GenerateMindMapInput - The input type for the generateMindMap function.
  * - GenerateMindMapOutput - The return type for the generateMindMap function.
- * - MindMapNodeSchema - The schema for a single node in the mind map.
+ * - MindMapNode - The schema for a single node in the mind map.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const MindMapNodeSchema = z.object({
+export type MindMapNode = {
+  topic: string;
+  children?: MindMapNode[];
+};
+
+export const MindMapNodeSchema: z.ZodType<MindMapNode> = z.object({
   topic: z.string().describe('The main topic of this node.'),
-  children: z.array(z.lazy(() => MindMapNodeSchema)).optional().describe('An array of child nodes.'),
+  children: z.lazy(() => z.array(MindMapNodeSchema).optional()).describe('An array of child nodes.'),
 });
-export type MindMapNode = z.infer<typeof MindMapNodeSchema>;
 
 
 const GenerateMindMapInputSchema = z.object({
