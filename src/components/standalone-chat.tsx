@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2, Upload, Copy } from "lucide-react";
+import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2, Upload, Copy, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -55,6 +55,7 @@ export function StandaloneChat() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [researchMode, setResearchMode] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<FormValues>({
@@ -63,6 +64,41 @@ export function StandaloneChat() {
       question: "",
     },
   });
+
+  useEffect(() => {
+    try {
+      const storedHistory = localStorage.getItem("chatHistory");
+      if (storedHistory) {
+        setHistory(JSON.parse(storedHistory));
+      }
+    } catch (error) {
+      console.error("Failed to parse chat history from localStorage", error);
+    }
+  }, []);
+
+  const updateHistory = (newQuestion: string) => {
+    setHistory(prevHistory => {
+      const updatedHistory = [newQuestion, ...prevHistory.filter(h => h !== newQuestion)].slice(0, 5);
+      try {
+        localStorage.setItem("chatHistory", JSON.stringify(updatedHistory));
+      } catch (error) {
+        console.error("Failed to save chat history to localStorage", error);
+      }
+      return updatedHistory;
+    });
+  };
+  
+  const deleteHistoryItem = (itemToDelete: string) => {
+    setHistory(prevHistory => {
+      const updatedHistory = prevHistory.filter(h => h !== itemToDelete);
+       try {
+        localStorage.setItem("chatHistory", JSON.stringify(updatedHistory));
+      } catch (error) {
+        console.error("Failed to save chat history to localStorage", error);
+      }
+      return updatedHistory;
+    });
+  }
 
   const fetchSuggestions = useCallback(async (docContent: string | null) => {
     try {
@@ -126,6 +162,10 @@ export function StandaloneChat() {
     form.setValue("question", suggestion);
     onSubmit({ question: suggestion });
   }
+  
+  const handleHistoryClick = (item: string) => {
+    form.setValue("question", item);
+  }
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -174,6 +214,7 @@ export function StandaloneChat() {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
     setSuggestions([]);
+    updateHistory(values.question);
     form.reset();
 
     const input = documentContent
@@ -318,6 +359,27 @@ export function StandaloneChat() {
       </ScrollArea>
       
       <div className="mt-auto pt-4 border-t bg-background">
+        {history.length > 0 && !isLoading && (
+          <div className="mb-2">
+            <div className="flex items-center gap-2 mb-2">
+              <History className="h-4 w-4 text-muted-foreground" />
+              <p className="text-xs font-medium text-muted-foreground">Recent</p>
+            </div>
+            <ScrollArea className="max-h-24">
+                <div className="flex items-center gap-2 flex-wrap">
+                    {history.map((h, i) => (
+                        <div key={i} className="flex items-center gap-1 rounded-full bg-secondary pr-2">
+                            <Button size="sm" variant="ghost" onClick={() => handleHistoryClick(h)} className="text-xs h-auto py-1 px-2 rounded-full">{h}</Button>
+                            <button onClick={() => deleteHistoryItem(h)} className="text-muted-foreground hover:text-foreground">
+                                <X className="h-3 w-3" />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+            </ScrollArea>
+          </div>
+        )}
+
         {suggestions.length > 0 && !isLoading && (
             <ScrollArea className="max-h-24">
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -382,3 +444,5 @@ export function StandaloneChat() {
     </div>
   );
 }
+
+    
