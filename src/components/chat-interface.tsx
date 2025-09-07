@@ -109,6 +109,7 @@ export function ChatInterface() {
   const removeFile = () => {
     setFileName(null);
     setDocumentContent(null);
+    setSuggestions([]);
     fetchSuggestions(null);
     toast({
         title: "File Removed",
