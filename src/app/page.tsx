@@ -1,7 +1,8 @@
-import { Bot, FileText, ArrowRight, LogIn } from "lucide-react";
+import { Bot, FileText, ArrowRight, LogIn, Share2, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ChatWidget } from "@/components/chat-widget";
 
 export default function Home() {
   return (
@@ -38,7 +39,7 @@ export default function Home() {
               <div className="flex flex-col justify-center space-y-4 text-center">
                 <div className="space-y-4">
                    <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm font-semibold">AI-Powered Analysis</div>
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline bg-clip-text text-transparent bg-gradient-to-r from-primary to-foreground">
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline bg-clip-text text-transparent bg-gradient-to-r from-foreground to-primary">
                     Unlock Insights from Your Documents
                   </h1>
                   <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
@@ -70,12 +71,12 @@ export default function Home() {
                  <div className="inline-block rounded-lg bg-background px-3 py-1 text-sm font-semibold">Key Features</div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl font-headline">How It Works</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Our platform simplifies information retrieval into three easy steps.
+                  Our platform simplifies information retrieval into four easy steps.
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-16 mt-12">
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg">
+            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-4 lg:gap-16 mt-12">
+              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
                 <div className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <FileText className="h-8 w-8" />
@@ -86,7 +87,7 @@ export default function Home() {
                   Securely upload any document format - PDF, DOCX, TXT, and more. Your data is encrypted and private.
                 </p>
               </div>
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg">
+              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
                  <div className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <Bot className="h-8 w-8" />
@@ -94,18 +95,29 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold">2. Ask Anything</h3>
                 <p className="text-muted-foreground">
-                  Ask complex questions in plain English. Our AI understands context and delivers precise answers.
+                  Ask complex questions in plain English. Our AI understands context and delivers precise answers instantly.
                 </p>
               </div>
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg">
+              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
                 <div className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-                      <ArrowRight className="h-8 w-8" />
+                      <MessageSquare className="h-8 w-8" />
                     </div>
                 </div>
                 <h3 className="text-xl font-bold">3. Get Insights</h3>
                 <p className="text-muted-foreground">
-                  Receive instant, accurate answers with references to the source text. No more manual searching.
+                  Receive accurate answers with references to the source text. No more manual searching.
+                </p>
+              </div>
+              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
+                <div className="flex justify-center items-center">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Share2 className="h-8 w-8" />
+                    </div>
+                </div>
+                <h3 className="text-xl font-bold">4. Share & Export</h3>
+                <p className="text-muted-foreground">
+                  Easily export conversations or share your findings with colleagues for seamless collaboration.
                 </p>
               </div>
             </div>
@@ -115,13 +127,14 @@ export default function Home() {
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
         <div className="container flex items-center justify-between px-4 md:px-6">
-            <p className="text-sm text-muted-foreground">&copy; 2024 Intituas AI. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">&copy; 2025 Intituas AI. All rights reserved.</p>
             <div className="flex items-center gap-4">
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link>
             </div>
         </div>
       </footer>
+      <ChatWidget />
     </div>
   );
 }
