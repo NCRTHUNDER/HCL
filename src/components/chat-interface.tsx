@@ -19,8 +19,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { getAnswer } from "@/app/actions";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { ScrollArea } from "./ui/scroll-area";
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -106,45 +106,47 @@ export function ChatInterface() {
     <div className="space-y-4">
       <Card className="shadow-lg bg-background flex flex-col h-[60vh]">
         <CardContent className="pt-6 flex-1 flex flex-col gap-4">
-          <div className="flex-1 space-y-4 overflow-y-auto pr-2">
-            {messages.length === 0 && !isLoading && (
-                 <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-                    <BrainCircuit className="w-16 h-16 mb-4" />
-                    <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
-                    <p className="text-sm">You can start a conversation or upload a document to ask questions about.</p>
+          <ScrollArea className="flex-1 pr-4">
+            <div className="space-y-4">
+              {messages.length === 0 && !isLoading && (
+                   <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground pt-16">
+                      <BrainCircuit className="w-16 h-16 mb-4" />
+                      <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
+                      <p className="text-sm">You can start a conversation or upload a document to ask questions about.</p>
+                  </div>
+              )}
+              {messages.map((message) => (
+                  <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
+                      {message.sender === 'ai' && (
+                          <Avatar className="w-8 h-8">
+                              <AvatarFallback>AI</AvatarFallback>
+                          </Avatar>
+                      )}
+                      <div className={`rounded-lg px-4 py-2 max-w-[80%] ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
+                          <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                      </div>
+                       {message.sender === 'user' && (
+                          <Avatar className="w-8 h-8">
+                              <AvatarFallback>U</AvatarFallback>
+                          </Avatar>
+                      )}
+                  </div>
+              ))}
+              {isLoading && (
+                <div className="flex items-start gap-3">
+                   <Avatar className="w-8 h-8">
+                      <AvatarFallback>AI</AvatarFallback>
+                   </Avatar>
+                  <div className="rounded-lg px-4 py-2 max-w-[80%] bg-secondary">
+                      <div className="flex items-center gap-2">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <p className="text-sm">Thinking...</p>
+                      </div>
+                  </div>
                 </div>
-            )}
-            {messages.map((message) => (
-                <div key={message.id} className={`flex items-start gap-3 ${message.sender === 'user' ? 'justify-end' : ''}`}>
-                    {message.sender === 'ai' && (
-                        <Avatar className="w-8 h-8">
-                            <AvatarFallback>AI</AvatarFallback>
-                        </Avatar>
-                    )}
-                    <div className={`rounded-lg px-4 py-2 max-w-[80%] ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                        <p className="text-sm whitespace-pre-wrap">{message.text}</p>
-                    </div>
-                     {message.sender === 'user' && (
-                        <Avatar className="w-8 h-8">
-                            <AvatarFallback>U</AvatarFallback>
-                        </Avatar>
-                    )}
-                </div>
-            ))}
-            {isLoading && (
-              <div className="flex items-start gap-3">
-                 <Avatar className="w-8 h-8">
-                    <AvatarFallback>AI</AvatarFallback>
-                 </Avatar>
-                <div className="rounded-lg px-4 py-2 max-w-[80%] bg-secondary">
-                    <div className="flex items-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        <p className="text-sm">Thinking...</p>
-                    </div>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          </ScrollArea>
           <div className="mt-auto pt-4 border-t">
              <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-2">
