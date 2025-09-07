@@ -78,7 +78,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-6">
             <Link href="/" className="flex items-center gap-2 mb-4">
-                <Bot className="h-8 w-8 text-primary" />
+                
                 <h1 className="text-2xl font-bold tracking-tight font-headline">
                     Intituas AI
                 </h1>

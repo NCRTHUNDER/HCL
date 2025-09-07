@@ -79,7 +79,7 @@ export default function DashboardPage() {
         <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
           <div className="flex gap-6 md:gap-10">
             <Link href="/" className="flex items-center space-x-2">
-              <Bot className="h-6 w-6 text-primary" />
+              
               <span className="inline-block font-bold text-lg">Intituas AI</span>
             </Link>
           </div>

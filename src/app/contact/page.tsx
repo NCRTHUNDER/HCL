@@ -8,7 +8,7 @@ export default function ContactPage() {
         <div className="flex flex-col min-h-screen bg-background text-foreground">
             <header className="w-full px-4 md:px-6 py-4 flex items-center justify-between fixed top-0 z-50 bg-background/80 backdrop-blur-sm">
                 <Link href="/" className="flex items-center gap-2">
-                <Bot className="h-6 w-6 text-primary" />
+                
                 <h1 className="text-xl font-bold tracking-tight font-headline">
                     Intituas AI
                 </h1>
