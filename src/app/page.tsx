@@ -1,4 +1,4 @@
-import { Bot, FileText, Share2 } from "lucide-react";
+import { Bot, FileText, Share2, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +12,15 @@ export default function Home() {
             <h1 className="text-2xl font-bold tracking-tight text-primary font-headline">
               Intituas AI
             </h1>
-            <ThemeToggle />
+            <div className="flex items-center gap-4">
+              <Link href="/login">
+                <Button variant="ghost">
+                  <LogIn className="mr-2" />
+                  Login
+                </Button>
+              </Link>
+              <ThemeToggle />
+            </div>
         </div>
       </header>
       <main className="flex-1">

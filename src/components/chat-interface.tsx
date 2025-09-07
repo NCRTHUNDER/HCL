@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -23,6 +22,7 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
+import { useAuth } from "@/hooks/use-auth";
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -43,6 +43,7 @@ export function ChatInterface() {
   const [documentContent, setDocumentContent] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [researchMode, setResearchMode] = useState(false);
+  const { user } = useAuth();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -87,6 +88,7 @@ export function ChatInterface() {
         documentContent: documentContent,
         question: values.question,
         researchMode: researchMode,
+        userId: user?.uid,
     });
 
     setIsLoading(false);

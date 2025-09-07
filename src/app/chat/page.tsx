@@ -1,6 +1,6 @@
 import { ChatInterface } from "@/components/chat-interface";
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function ChatPage() {
@@ -8,9 +8,9 @@ export default function ChatPage() {
     <main className="flex min-h-screen flex-col items-center bg-secondary">
        <header className="w-full bg-background py-4 border-b">
         <div className="container mx-auto max-w-5xl px-4 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 text-primary hover:underline">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
+            <Link href="/dashboard" className="flex items-center gap-2 text-primary hover:underline">
+                <LayoutDashboard className="h-4 w-4" />
+                Dashboard
             </Link>
           <h1 className="text-2xl font-bold tracking-tight text-primary font-headline">
             Intituas AI

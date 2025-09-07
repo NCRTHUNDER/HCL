@@ -1,4 +1,3 @@
-
 'use server';
 
 import {
@@ -6,25 +5,65 @@ import {
   GenerateAnswerFromDocumentInput,
 } from '@/ai/flows/generate-answer-from-document';
 import { generateAnswer, GenerateAnswerInput } from '@/ai/flows/generate-answer';
+import { auth, db } from '@/lib/firebase-admin';
+import { collection, addDoc, serverTimestamp, query, where, orderBy, limit, getDocs, writeBatch } from 'firebase/firestore';
+
+
+async function saveSearchHistory(userId: string, question: string, answer: string) {
+    if (!userId) return;
+
+    // Add new history
+    const historyCollection = collection(db, 'searchHistory');
+    await addDoc(historyCollection, {
+        userId,
+        question,
+        answer,
+        createdAt: serverTimestamp(),
+    });
+
+    // Check if history exceeds 5 items
+    const q = query(
+        historyCollection,
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc')
+    );
+    
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.size > 5) {
+        const batch = writeBatch(db);
+        const docsToDelete = querySnapshot.docs.slice(5);
+        docsToDelete.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        await batch.commit();
+    }
+}
 
 
 export async function getAnswer(
-  input: GenerateAnswerFromDocumentInput
+  input: GenerateAnswerFromDocumentInput & { userId?: string }
 ): Promise<{ answer: string } | { error: string }>;
 export async function getAnswer(
-  input: GenerateAnswerInput
+  input: GenerateAnswerInput & { userId?: string }
 ): Promise<{ answer: string } | { error: string }>;
 export async function getAnswer(
-  input: GenerateAnswerFromDocumentInput | GenerateAnswerInput
+  input: (GenerateAnswerFromDocumentInput | GenerateAnswerInput) & { userId?: string }
 ): Promise<{ answer: string } | { error: string }> {
   try {
+    let output;
     if ('documentContent' in input && input.documentContent) {
-       const output = await generateAnswerFromDocument(input as GenerateAnswerFromDocumentInput);
-       return { answer: output.answer };
+       output = await generateAnswerFromDocument(input as GenerateAnswerFromDocumentInput);
     } else {
-        const output = await generateAnswer(input as GenerateAnswerInput);
-        return { answer: output.answer };
+        output = await generateAnswer(input as GenerateAnswerInput);
     }
+
+    if(input.userId) {
+        await saveSearchHistory(input.userId, input.question, output.answer);
+    }
+
+    return { answer: output.answer };
+
   } catch (e: any) {
     console.error(e);
     return { error: 'Sorry, there was an issue generating an answer. Please check your input and try again.' };
