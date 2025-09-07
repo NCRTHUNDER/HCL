@@ -133,11 +133,11 @@ export function ChatInterface() {
     setSuggestions([]);
     form.reset();
 
-    const result = await getAnswer({
-        documentContent: documentContent,
-        question: values.question,
-        researchMode: researchMode,
-    });
+    const input = documentContent
+      ? { type: 'document' as const, documentContent: documentContent, question: values.question, researchMode: researchMode }
+      : { type: 'general' as const, question: values.question, researchMode: researchMode };
+
+    const result = await getAnswer(input);
 
     setIsLoading(false);
 

@@ -1,3 +1,4 @@
+
 'use server';
 
 import {
@@ -15,21 +16,29 @@ import {
   GenerateSuggestionsInput,
 } from '@/ai/flows/generate-suggestions';
 
+// Define a union type for the inputs to make handling them easier.
+type AnswerInput = 
+  | ({ type: 'document' } & GenerateAnswerFromDocumentInput)
+  | ({ type: 'general' } & GenerateAnswerInput);
+
+// Define a union type for the outputs.
+type AnswerOutput = 
+  | (GenerateAnswerFromDocumentOutput & { answer: string })
+  | (GenerateAnswerOutput & { answer: string });
+
 export async function getAnswer(
-  input: GenerateAnswerFromDocumentInput | GenerateAnswerInput
-): Promise<
-  | (GenerateAnswerFromDocumentOutput & {answer: string})
-  | (GenerateAnswerOutput & {answer: string})
-  | {error: string}
-> {
+  input: AnswerInput
+): Promise<AnswerOutput | { error: string }> {
   try {
     let output;
-    if ('documentContent' in input && input.documentContent) {
-      output = await generateAnswerFromDocument(
-        input as GenerateAnswerFromDocumentInput
-      );
+    if (input.type === 'document') {
+      // The input is for answering from a document.
+      const { type, ...docInput } = input;
+      output = await generateAnswerFromDocument(docInput);
     } else {
-      output = await generateAnswer(input as GenerateAnswerInput);
+      // The input is for a general question.
+      const { type, ...generalInput } = input;
+      output = await generateAnswer(generalInput);
     }
 
     return {
