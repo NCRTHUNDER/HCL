@@ -3,15 +3,29 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ChatWidget } from "@/components/chat-widget";
+import { MotionDiv } from "@/components/motion-div";
 
 export default function Home() {
+  const featureVariants = {
+    initial: { y: 20, opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+  };
+
+  const cardHover = {
+    hover: {
+        scale: 1.05,
+        y: -10,
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+        transition: { duration: 0.3 }
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="w-full px-4 md:px-6 py-4 flex items-center justify-between fixed top-0 z-50 bg-background/80 backdrop-blur-sm">
         <Link href="/" className="flex items-center gap-2">
-          
           <h1 className="text-xl font-bold tracking-tight font-headline">
-            DocuQuery
+            Intituas AI
           </h1>
         </Link>
         <div className="flex items-center gap-4">
@@ -40,7 +54,7 @@ export default function Home() {
                     Unlock Insights from Your Documents
                   </h1>
                   <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
-                    DocuQuery transforms your documents into interactive knowledge bases. Ask questions in natural language and get instant, intelligent answers.
+                    Intituas AI transforms your documents into interactive knowledge bases. Ask questions in natural language and get instant, intelligent answers.
                   </p>
                 </div>
                 <div className="flex justify-center flex-col gap-4 min-[400px]:flex-row">
@@ -68,50 +82,50 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-4 lg:gap-16 mt-12">
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
-                <div className="flex justify-center items-center">
+              <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-4 text-center p-6 rounded-lg transition-shadow">
+                <MotionDiv whileHover={{scale: 1.1, rotate: 5}} className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <FileText className="h-8 w-8" />
                     </div>
-                </div>
+                </MotionDiv>
                 <h3 className="text-xl font-bold">1. Upload Document</h3>
                 <p className="text-muted-foreground">
                   Securely upload any document format - PDF, DOCX, TXT, and more. Your data is encrypted and private.
                 </p>
-              </div>
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
-                 <div className="flex justify-center items-center">
+              </MotionDiv>
+              <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-4 text-center p-6 rounded-lg transition-shadow">
+                 <MotionDiv whileHover={{scale: 1.1, rotate: -5}} className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <MessageSquare className="h-8 w-8" />
                     </div>
-                </div>
+                </MotionDiv>
                 <h3 className="text-xl font-bold">2. Ask Anything</h3>
                 <p className="text-muted-foreground">
                   Ask complex questions in plain English. Our AI understands context and delivers precise answers instantly.
                 </p>
-              </div>
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
-                <div className="flex justify-center items-center">
+              </MotionDiv>
+              <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-4 text-center p-6 rounded-lg transition-shadow">
+                <MotionDiv whileHover={{scale: 1.1, rotate: 5}} className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <BrainCircuit className="h-8 w-8" />
                     </div>
-                </div>
+                </MotionDiv>
                 <h3 className="text-xl font-bold">3. Get Insights</h3>
                 <p className="text-muted-foreground">
                   Receive accurate answers with references to the source text. No more manual searching.
                 </p>
-              </div>
-              <div className="grid gap-4 text-center p-6 rounded-lg transition-all hover:bg-background/50 hover:shadow-lg hover:-translate-y-2">
-                <div className="flex justify-center items-center">
+              </MotionDiv>
+              <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-4 text-center p-6 rounded-lg transition-shadow">
+                <MotionDiv whileHover={{scale: 1.1, rotate: -5}} className="flex justify-center items-center">
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <Share2 className="h-8 w-8" />
                     </div>
-                </div>
+                </MotionDiv>
                 <h3 className="text-xl font-bold">4. Share & Export</h3>
                 <p className="text-muted-foreground">
                   Easily export conversations or share your findings with colleagues for seamless collaboration.
                 </p>
-              </div>
+              </MotionDiv>
             </div>
           </div>
         </section>
@@ -128,21 +142,21 @@ export default function Home() {
               </p>
             </div>
             <div className="mx-auto w-full max-w-sm space-y-4 sm:max-w-5xl sm:grid sm:grid-cols-3 sm:gap-6 sm:space-y-0">
-              <div className="grid gap-2 text-center p-6 rounded-lg transition-all hover:bg-secondary/50 hover:shadow-lg">
+               <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-2 text-center p-6 rounded-lg transition-shadow">
                 <ShieldCheck className="w-10 h-10 mx-auto text-primary" />
                 <h3 className="text-lg font-bold">Secure and Private</h3>
                 <p className="text-sm text-muted-foreground">Your documents are encrypted and processed in a secure environment. We prioritize your privacy.</p>
-              </div>
-              <div className="grid gap-2 text-center p-6 rounded-lg transition-all hover:bg-secondary/50 hover:shadow-lg">
+              </MotionDiv>
+              <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-2 text-center p-6 rounded-lg transition-shadow">
                 <BrainCircuit className="w-10 h-10 mx-auto text-primary" />
                 <h3 className="text-lg font-bold">Powerful AI Engine</h3>
                 <p className="text-sm text-muted-foreground">Powered by advanced LLMs, our AI understands context, nuance, and complex queries.</p>
-              </div>
-              <div className="grid gap-2 text-center p-6 rounded-lg transition-all hover:bg-secondary/50 hover:shadow-lg">
+              </MotionDiv>
+              <MotionDiv variants={cardHover} whileHover="hover" className="grid gap-2 text-center p-6 rounded-lg transition-shadow">
                 <Users className="w-10 h-10 mx-auto text-primary" />
                 <h3 className="text-lg font-bold">Built for Collaboration</h3>
                 <p className="text-sm text-muted-foreground">Easily share insights and collaborate with your team to make data-driven decisions faster.</p>
-              </div>
+              </MotionDiv>
             </div>
           </div>
         </section>
@@ -171,7 +185,7 @@ export default function Home() {
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
         <div className="container flex items-center justify-between px-4 md:px-6">
-            <p className="text-sm text-muted-foreground">&copy; 2025 DocuQuery. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">&copy; 2025 Intituas AI. All rights reserved.</p>
             <div className="flex items-center gap-4">
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link>

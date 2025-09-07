@@ -232,7 +232,7 @@ export function StandaloneChat() {
                >
                    <Upload className="w-10 h-10 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-semibold">Welcome to Intituas AI</h3>
-                  <p className="text-sm mt-1">Drag & drop a document here or start a conversation below.</p>
+                  <p className="text-sm mt-1">Start a conversation by typing below or upload a document to begin.</p>
               </div>
           )}
           {messages.map((message) => (
@@ -382,5 +382,3 @@ export function StandaloneChat() {
     </div>
   );
 }
-
-    

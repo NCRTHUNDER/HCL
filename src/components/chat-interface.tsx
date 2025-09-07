@@ -227,7 +227,7 @@ export function ChatInterface() {
                >
                   <Upload className="w-12 h-12 text-muted-foreground mb-4" />
                   <h3 className="text-2xl font-semibold tracking-tight">Welcome to Intituas AI</h3>
-                  <p className="text-base mt-2">Drag & drop a document here, or start a conversation by typing below.</p>
+                  <p className="text-base mt-2">Start a conversation by typing below or upload a document to begin.</p>
               </div>
           )}
           {messages.map((message) => (
@@ -377,5 +377,3 @@ export function ChatInterface() {
     </div>
   );
 }
-
-    
