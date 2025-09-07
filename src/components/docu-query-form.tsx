@@ -71,11 +71,8 @@ export function DocuQueryForm() {
 
   return (
     <div className="space-y-8">
-      <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>1. Provide Document Content</CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Card className="shadow-lg bg-background">
+        <CardContent className="pt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -83,11 +80,11 @@ export function DocuQueryForm() {
                 name="documentContent"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Document Text</FormLabel>
+                    <FormLabel className="font-bold">1. Provide Document Content</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Paste the content of your PDF, Markdown file, or article here."
-                        className="min-h-[200px] resize-y bg-white dark:bg-gray-900/50"
+                        className="min-h-[200px] resize-y"
                         {...field}
                       />
                     </FormControl>
@@ -103,7 +100,7 @@ export function DocuQueryForm() {
                 name="question"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>2. Ask your Question</FormLabel>
+                    <FormLabel className="font-bold">2. Ask your Question</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g., What is the difference between supervised and unsupervised learning?" {...field} />
                     </FormControl>
@@ -114,7 +111,7 @@ export function DocuQueryForm() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" disabled={isLoading} className="w-full !mt-8 bg-accent text-accent-foreground hover:bg-accent/90">
+              <Button type="submit" disabled={isLoading} className="w-full !mt-8" size="lg">
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -133,7 +130,7 @@ export function DocuQueryForm() {
       </Card>
 
       {(isLoading || answer) && (
-        <Card className="shadow-lg">
+        <Card className="shadow-lg bg-background">
           <CardHeader>
             <CardTitle>Answer</CardTitle>
           </CardHeader>
