@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview This file defines a Genkit flow for generating answers to questions about a document.
@@ -14,6 +15,7 @@ const GenerateAnswerFromDocumentInputSchema = z.object({
   question: z.string().describe('The question to answer about the document.'),
   documentContent: z
     .string()
+    .optional()
     .describe('The content of the document to answer the question from.'),
   researchMode: z
     .boolean()

@@ -156,7 +156,7 @@ export function StandaloneChat() {
       setMessages((prev) => [...prev, aiErrorMessage]);
 
     } else {
-      const { answer, confidenceScore, citations } = result;
+      const { answer, confidenceScore, citations } = result as any;
       const aiMessage: Message = { 
         id: `ai-${Date.now()}`, 
         text: answer, 
@@ -199,7 +199,7 @@ export function StandaloneChat() {
                 )}
                 <div className={cn("rounded-lg px-3 py-2 max-w-[85%] space-y-2", message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                     {message.text && <p className="text-sm whitespace-pre-wrap">{message.text}</p>}
-                    {message.sender === 'ai' && (message.confidenceScore || message.citations) && (
+                    {message.sender === 'ai' && (message.confidenceScore || (message.citations && message.citations.length > 0)) && (
                       <div className="flex items-center gap-4 pt-2 border-t border-border/50">
                         {message.confidenceScore && (
                           <TooltipProvider>

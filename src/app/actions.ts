@@ -16,22 +16,19 @@ import {
   GenerateSuggestionsInput,
 } from '@/ai/flows/generate-suggestions';
 
-// Define a union type for the inputs to make handling them easier.
-type AnswerInput = GenerateAnswerFromDocumentInput | GenerateAnswerInput;
-
 // Define a union type for the outputs.
 type AnswerOutput =
   | GenerateAnswerFromDocumentOutput
   | GenerateAnswerOutput;
 
 function isDocumentQuestion(
-  input: AnswerInput
+  input: any
 ): input is GenerateAnswerFromDocumentInput {
-  return (input as GenerateAnswerFromDocumentInput).documentContent !== undefined;
+  return input.documentContent !== undefined;
 }
 
 export async function getAnswer(
-  input: AnswerInput
+  input: GenerateAnswerInput | GenerateAnswerFromDocumentInput
 ): Promise<AnswerOutput | {error: string}> {
   try {
     if (isDocumentQuestion(input)) {
