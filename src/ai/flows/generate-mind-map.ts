@@ -16,10 +16,15 @@ export type MindMapNode = {
   children?: MindMapNode[];
 };
 
-export const MindMapNodeSchema: z.ZodType<MindMapNode> = z.object({
-  topic: z.string().describe('The main topic of this node.'),
-  children: z.lazy(() => z.array(MindMapNodeSchema).optional()).describe('An array of child nodes.'),
-});
+export const MindMapNodeSchema: z.ZodType<MindMapNode> = z.lazy(() =>
+  z.object({
+    topic: z.string().describe('The main topic of this node.'),
+    children: z
+      .array(MindMapNodeSchema)
+      .optional()
+      .describe('An array of child nodes.'),
+  })
+);
 
 
 const GenerateMindMapInputSchema = z.object({
