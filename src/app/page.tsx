@@ -15,6 +15,9 @@ export default function Home() {
           </h1>
         </Link>
         <div className="flex items-center gap-4">
+          <Link href="/contact">
+              <Button variant="ghost">Contact Us</Button>
+          </Link>
           <Link href="/chat">
             <Button>
               Try the Demo
