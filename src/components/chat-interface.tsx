@@ -105,7 +105,7 @@ export function ChatInterface() {
   return (
     <div className="space-y-4">
       <Card className="shadow-lg bg-background flex flex-col h-[60vh]">
-        <CardContent className="pt-6 flex-1 flex flex-col gap-4">
+        <CardContent className="pt-6 flex-1 flex flex-col gap-4 overflow-hidden">
           <ScrollArea className="flex-1 pr-4">
             <div className="space-y-4">
               {messages.length === 0 && !isLoading && (
