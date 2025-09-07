@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2, Upload } from "lucide-react";
+import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2, Upload, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -122,6 +122,14 @@ export function ChatInterface() {
     onSubmit({ question: suggestion });
   }
 
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Copied to Clipboard",
+      description: "The AI's response has been copied.",
+    });
+  };
+
   const clearChat = () => {
     setMessages([]);
     setSuggestions([]);
@@ -231,7 +239,7 @@ export function ChatInterface() {
                 )}
                 <div className={cn("rounded-lg px-4 py-3 max-w-[80%] space-y-2", message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                     {message.text && <p className="text-sm whitespace-pre-wrap">{message.text}</p>}
-                    {message.sender === 'ai' && (message.confidenceScore || (message.citations && message.citations.length > 0)) && (
+                    {message.sender === 'ai' && message.text && (
                       <div className="flex items-center gap-4 pt-2 border-t border-border/50">
                         {message.confidenceScore && (
                           <TooltipProvider>
@@ -266,6 +274,15 @@ export function ChatInterface() {
                             </Tooltip>
                           </TooltipProvider>
                         )}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-7 w-7 ml-auto"
+                            onClick={() => handleCopy(message.text!)}
+                          >
+                            <Copy className="h-4 w-4" />
+                            <span className="sr-only">Copy message</span>
+                          </Button>
                       </div>
                     )}
                 </div>
@@ -360,3 +377,5 @@ export function ChatInterface() {
     </div>
   );
 }
+
+    
