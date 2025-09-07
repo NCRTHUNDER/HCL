@@ -129,6 +129,7 @@ export default function Home() {
         <div className="container flex items-center justify-between px-4 md:px-6">
             <p className="text-sm text-muted-foreground">&copy; 2025 Intituas AI. All rights reserved.</p>
             <div className="flex items-center gap-4">
+                <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">Contact</Link>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link>
             </div>
