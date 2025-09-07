@@ -136,7 +136,6 @@ export function ChatInterface() {
     const result = await getAnswer({
         documentContent: isDirectQuery ? null : documentContent,
         question: question,
-        researchMode: false,
     });
 
     setIsLoading(false);
@@ -303,7 +302,7 @@ export function ChatInterface() {
                     <FormItem className="flex-1">
                         <FormControl>
                             <div className="relative">
-                                <Input placeholder={documentContent ? "Ask about your document or start with @ai for general questions..." : "Ask me anything..."} {...field} />
+                                <Input placeholder={documentContent ? "Ask about your document..." : "Ask me anything..."} {...field} />
                             </div>
                         </FormControl>
                         <FormMessage />
@@ -319,3 +318,5 @@ export function ChatInterface() {
     </div>
   );
 }
+
+    

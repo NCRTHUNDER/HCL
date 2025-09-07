@@ -141,7 +141,6 @@ export function StandaloneChat() {
     const result = await getAnswer({
         documentContent: isDirectQuery ? null : documentContent,
         question: question,
-        researchMode: false,
     });
 
     setIsLoading(false);
@@ -308,7 +307,7 @@ export function StandaloneChat() {
                     <FormItem className="flex-1">
                         <FormControl>
                             <div className="relative">
-                                <Input placeholder="Ask anything..." {...field} className="text-sm" />
+                                <Input placeholder="Ask anything..." {...field} />
                             </div>
                         </FormControl>
                         <FormMessage />
@@ -324,3 +323,5 @@ export function StandaloneChat() {
     </div>
   );
 }
+
+    

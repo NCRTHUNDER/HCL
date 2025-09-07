@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import { MessageSquare, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { AnimatePresence, motion } from "framer-motion";
 import { StandaloneChat } from "./standalone-chat";
 
@@ -22,9 +23,12 @@ export function ChatWidget() {
             className="fixed bottom-24 right-5 z-50 w-[calc(100vw-40px)] sm:w-96"
           >
             <Card className="shadow-2xl h-[60vh] flex flex-col">
-              <CardHeader className="flex flex-row items-center justify-between p-4">
-                <CardTitle className="text-lg">Chat with Intituas AI</CardTitle>
-                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
+              <CardHeader className="flex flex-row items-start justify-between p-4 space-y-0">
+                  <div className="space-y-1.5">
+                    <CardTitle className="text-lg">Chat with Intituas AI</CardTitle>
+                    <CardDescription className="text-xs">Ask about your documents or any general question.</CardDescription>
+                  </div>
+                <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="-mt-1">
                   <X className="h-5 w-5" />
                 </Button>
               </CardHeader>
@@ -57,3 +61,5 @@ export function ChatWidget() {
     </>
   );
 }
+
+    
