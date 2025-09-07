@@ -1,4 +1,4 @@
-import { DocuQueryForm } from "@/components/docu-query-form";
+import { ChatInterface } from "@/components/chat-interface";
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -29,7 +29,7 @@ export default function ChatPage() {
               Experience the power of AI-driven document analysis firsthand.
             </p>
           </header>
-          <DocuQueryForm />
+          <ChatInterface />
         </div>
       </section>
 
