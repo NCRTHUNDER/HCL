@@ -11,7 +11,7 @@ export default function Home() {
         <Link href="/" className="flex items-center gap-2">
           
           <h1 className="text-xl font-bold tracking-tight font-headline">
-            Intituas AI
+            DocuQuery
           </h1>
         </Link>
         <div className="flex items-center gap-4">
@@ -40,7 +40,7 @@ export default function Home() {
                     Unlock Insights from Your Documents
                   </h1>
                   <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
-                    Intituas AI transforms your documents into interactive knowledge bases. Ask questions in natural language and get instant, intelligent answers.
+                    DocuQuery transforms your documents into interactive knowledge bases. Ask questions in natural language and get instant, intelligent answers.
                   </p>
                 </div>
                 <div className="flex justify-center flex-col gap-4 min-[400px]:flex-row">
@@ -116,7 +116,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-12 md:py-24 lg:py-32 border-t">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
                <div className="inline-block rounded-lg bg-secondary px-3 py-1 text-sm font-semibold">Why Choose Us?</div>
@@ -171,7 +171,7 @@ export default function Home() {
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
         <div className="container flex items-center justify-between px-4 md:px-6">
-            <p className="text-sm text-muted-foreground">&copy; 2025 Intituas AI. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">&copy; 2025 DocuQuery. All rights reserved.</p>
             <div className="flex items-center gap-4">
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link>
