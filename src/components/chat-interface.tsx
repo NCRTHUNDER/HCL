@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, FileUp, X, User, Bot } from "lucide-react";
+import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,14 +15,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { getAnswer } from "@/app/actions";
+import { getAnswer, getSuggestions } from "@/app/actions";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
 import { Card, CardContent } from "./ui/card";
 import { cn } from "@/lib/utils";
-
+import { Badge } from "./ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const formSchema = z.object({
   question: z.string().min(1, "Question cannot be empty."),
@@ -34,6 +40,8 @@ interface Message {
   id: string;
   sender: "user" | "ai";
   text?: string;
+  confidenceScore?: number;
+  citations?: string[];
 }
 
 export function ChatInterface() {
@@ -43,14 +51,8 @@ export function ChatInterface() {
   const [documentContent, setDocumentContent] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [researchMode, setResearchMode] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-
-
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-        scrollAreaRef.current.scrollTo({ top: scrollAreaRef.current.scrollHeight, behavior: 'smooth' });
-    }
-  }, [messages])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -58,6 +60,26 @@ export function ChatInterface() {
       question: "",
     },
   });
+
+  const fetchSuggestions = useCallback(async (docContent: string | null) => {
+    const result = await getSuggestions({ documentContent: docContent });
+    if (result.suggestions) {
+      setSuggestions(result.suggestions);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSuggestions(null); // Initial general suggestions
+  }, [fetchSuggestions]);
+  
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
+        if (viewport) {
+            viewport.scrollTo({ top: viewport.scrollHeight, behavior: 'smooth' });
+        }
+    }
+  }, [messages])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -71,6 +93,7 @@ export function ChatInterface() {
             title: "File Uploaded",
             description: `${file.name} is ready for questions.`,
         });
+        fetchSuggestions(content);
       };
       reader.readAsText(file);
     }
@@ -79,21 +102,31 @@ export function ChatInterface() {
   const removeFile = () => {
     setFileName(null);
     setDocumentContent(null);
+    fetchSuggestions(null);
     toast({
         title: "File Removed",
         description: "The document has been removed from the chat.",
     });
   }
 
+  const handleSuggestionClick = (suggestion: string) => {
+    form.setValue("question", suggestion);
+    onSubmit({ question: suggestion });
+  }
+
   async function onSubmit(values: FormValues) {
     const userMessage: Message = { id: `user-${Date.now()}`, text: values.question, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
+    setSuggestions([]);
     form.reset();
 
+    const isDirectQuery = values.question.startsWith('@ai');
+    const question = isDirectQuery ? values.question.substring(3).trim() : values.question;
+    
     const result = await getAnswer({
-        documentContent: documentContent,
-        question: values.question,
+        documentContent: isDirectQuery ? null : documentContent,
+        question: question,
         researchMode: researchMode,
     });
 
@@ -109,8 +142,16 @@ export function ChatInterface() {
       setMessages((prev) => [...prev, aiErrorMessage]);
 
     } else {
-      const aiMessage: Message = { id: `ai-${Date.now()}`, text: result.answer, sender: "ai" };
+      const { answer, confidenceScore, citations } = result;
+      const aiMessage: Message = { 
+        id: `ai-${Date.now()}`, 
+        text: answer, 
+        sender: "ai",
+        confidenceScore: confidenceScore,
+        citations: citations,
+      };
       setMessages((prev) => [...prev, aiMessage]);
+      fetchSuggestions(documentContent);
     }
   }
 
@@ -132,8 +173,45 @@ export function ChatInterface() {
                         <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
                     </Avatar>
                 )}
-                <div className={cn("rounded-lg px-4 py-2 max-w-[80%]", message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
+                <div className={cn("rounded-lg px-4 py-3 max-w-[80%] space-y-2", message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary')}>
                     {message.text && <p className="text-sm whitespace-pre-wrap">{message.text}</p>}
+                    {message.sender === 'ai' && (message.confidenceScore || message.citations) && (
+                      <div className="flex items-center gap-4 pt-2 border-t border-border/50">
+                        {message.confidenceScore && (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                  <Badge variant="outline" className="gap-1.5">
+                                    <Sparkles className="h-3 w-3" />
+                                    {message.confidenceScore.toFixed(0)}%
+                                  </Badge>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Confidence Score</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                        {message.citations && message.citations.length > 0 && (
+                           <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Badge variant="outline" className="gap-1.5 cursor-help">
+                                  <Quote className="h-3 w-3" />
+                                  {message.citations.length} Citation(s)
+                                </Badge>
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-xs">
+                                <p className="font-bold mb-2">Citations:</p>
+                                <ul className="list-disc pl-4 space-y-2">
+                                  {message.citations.map((c, i) => <li key={i} className="text-xs">"{c}"</li>)}
+                                </ul>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+                      </div>
+                    )}
                 </div>
                  {message.sender === 'user' && (
                     <Avatar className="w-8 h-8 border">
@@ -147,7 +225,7 @@ export function ChatInterface() {
                <Avatar className="w-8 h-8 border">
                   <AvatarFallback><Bot className="h-5 w-5"/></AvatarFallback>
                </Avatar>
-              <div className="rounded-lg px-4 py-2 max-w-[80%] bg-secondary">
+              <div className="rounded-lg px-4 py-3 max-w-[80%] bg-secondary">
                   <div className="flex items-center gap-2 text-muted-foreground">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       <p className="text-sm">Thinking...</p>
@@ -159,12 +237,21 @@ export function ChatInterface() {
       </ScrollArea>
       
       <div className="mt-auto pt-4 border-t bg-background">
+        {suggestions.length > 0 && !isLoading && (
+            <div className="flex items-center gap-2 mb-4 flex-wrap">
+                <p className="text-sm font-medium text-muted-foreground mr-2">Suggestions:</p>
+                {suggestions.map((s, i) => (
+                    <Button key={i} size="sm" variant="outline" onClick={() => handleSuggestionClick(s)}>{s}</Button>
+                ))}
+            </div>
+        )}
+
          {fileName && (
             <Card className="mb-4 bg-secondary border-dashed">
                 <CardContent className="p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                         <Paperclip className="h-5 w-5 text-primary flex-shrink-0" />
-                        <div className="flex-grow">
+                        <div className="flex-grow min-w-0">
                             <p className="font-semibold text-sm truncate">{fileName}</p>
                             <p className="text-xs text-muted-foreground">File is ready to be queried.</p>
                         </div>
@@ -197,7 +284,21 @@ export function ChatInterface() {
                     render={({ field }) => (
                     <FormItem className="flex-1">
                         <FormControl>
-                            <Input placeholder={documentContent ? "Ask a question about your document..." : "Ask me anything..."} {...field} />
+                            <div className="relative">
+                                <Input placeholder={documentContent ? "Ask about your document or start with @ai for general questions..." : "Ask me anything..."} {...field} />
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-xs p-1 rounded-sm bg-secondary cursor-help hidden md:block">
+                                                @ai
+                                            </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Start your message with <span className="font-mono bg-muted p-1 rounded">@ai</span> to ask a general question.</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            </div>
                         </FormControl>
                         <FormMessage />
                     </FormItem>

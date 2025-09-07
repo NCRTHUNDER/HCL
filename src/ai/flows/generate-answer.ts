@@ -12,12 +12,22 @@ import {z} from 'genkit';
 
 const GenerateAnswerInputSchema = z.object({
   question: z.string().describe('The question to answer.'),
-  researchMode: z.boolean().optional().describe('Whether to provide a more detailed, research-oriented answer.'),
+  researchMode: z
+    .boolean()
+    .optional()
+    .describe('Whether to provide a more detailed, research-oriented answer.'),
 });
 export type GenerateAnswerInput = z.infer<typeof GenerateAnswerInputSchema>;
 
 const GenerateAnswerOutputSchema = z.object({
   answer: z.string().describe('The answer to the question.'),
+  confidenceScore: z
+    .number()
+    .min(0)
+    .max(100)
+    .describe(
+      'A score from 0 to 100 representing the confidence in the answer.'
+    ),
 });
 export type GenerateAnswerOutput = z.infer<typeof GenerateAnswerOutputSchema>;
 
@@ -32,6 +42,8 @@ const generateAnswerPrompt = ai.definePrompt({
   input: {schema: GenerateAnswerInputSchema},
   output: {schema: GenerateAnswerOutputSchema},
   prompt: `You are a helpful AI assistant.
+  Provide a confidence score for your answer based on how certain you are about the information.
+
   {{#if researchMode}}
   You are in research mode. Provide a detailed, in-depth, and comprehensive answer.
   {{/if}}
@@ -39,8 +51,7 @@ const generateAnswerPrompt = ai.definePrompt({
   Answer the following question.
 
 Question: {{{question}}}
-
-Answer:`,
+`,
 });
 
 const generateAnswerFlow = ai.defineFlow(
