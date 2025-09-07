@@ -5,12 +5,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig: FirebaseOptions = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyAJnBfdPbZXOuFlTB07DjweeCbzHrsgjkM",
+  authDomain: "docuquery-1gobw.firebaseapp.com",
+  projectId: "docuquery-1gobw",
+  storageBucket: "docuquery-1gobw.firebasestorage.app",
+  messagingSenderId: "614664630044",
+  appId: "1:614664630044:web:15e8ac0cd7ecfd3a96d4d9",
 };
 
 let app;
@@ -21,7 +21,7 @@ if (!getApps().length) {
     if (firebaseConfig.apiKey && firebaseConfig.projectId) {
         app = initializeApp(firebaseConfig);
     } else {
-        console.error("Firebase config is missing. Please check your .env.local file.");
+        console.error("Firebase config is missing or incomplete.");
         // We are not initializing the app here, so auth and db will be null.
         // The UI should handle this gracefully.
     }
