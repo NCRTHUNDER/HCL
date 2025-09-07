@@ -20,7 +20,6 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ScrollArea } from "./ui/scroll-area";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
-import { useAuth } from "@/hooks/use-auth";
 import { Card, CardContent } from "./ui/card";
 import { cn } from "@/lib/utils";
 
@@ -44,7 +43,6 @@ export function ChatInterface() {
   const [documentContent, setDocumentContent] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [researchMode, setResearchMode] = useState(false);
-  const { user } = useAuth();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
 
@@ -97,7 +95,6 @@ export function ChatInterface() {
         documentContent: documentContent,
         question: values.question,
         researchMode: researchMode,
-        userId: user?.uid,
     });
 
     setIsLoading(false);

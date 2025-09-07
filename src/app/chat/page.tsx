@@ -2,7 +2,6 @@ import { ChatInterface } from "@/components/chat-interface";
 import Link from 'next/link';
 import { Bot } from 'lucide-react';
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
 
 export default function ChatPage() {
   return (
@@ -14,9 +13,6 @@ export default function ChatPage() {
             <span className="inline-block font-bold text-lg">Intituas AI</span>
           </Link>
           <div className="flex items-center gap-4">
-            <Link href="/dashboard">
-                <Button variant="ghost">Dashboard</Button>
-            </Link>
             <ThemeToggle />
           </div>
         </div>

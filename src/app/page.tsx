@@ -20,15 +20,9 @@ export default function Home() {
               Contact
             </Button>
           </Link>
-          <Link href="/login">
-            <Button variant="ghost">
-              Login
-              <LogIn className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-          <Link href="/signup">
+          <Link href="/chat">
             <Button>
-              Sign Up
+              Try the Demo
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
@@ -56,11 +50,6 @@ export default function Home() {
                     <Button size="lg">
                       Try the Demo
                       <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                  </Link>
-                   <Link href="/signup">
-                    <Button size="lg" variant="outline">
-                      Get Started for Free
                     </Button>
                   </Link>
                 </div>
@@ -167,14 +156,13 @@ export default function Home() {
                 Ready to Dive In?
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                Sign up today and start transforming your documents into actionable knowledge.
-                It's free to get started.
+                Try the interactive demo and start transforming your documents into actionable knowledge.
               </p>
             </div>
             <div className="mx-auto w-full max-w-sm space-y-2">
-                <Link href="/signup">
+                <Link href="/chat">
                     <Button size="lg">
-                        Sign Up for Free
+                        Try the Demo
                         <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                 </Link>

@@ -5,45 +5,12 @@ import {
   GenerateAnswerFromDocumentInput,
 } from '@/ai/flows/generate-answer-from-document';
 import { generateAnswer, GenerateAnswerInput } from '@/ai/flows/generate-answer';
-import { auth, db } from '@/lib/firebase-admin';
-import { collection, addDoc, serverTimestamp, query, where, orderBy, limit, getDocs, writeBatch } from 'firebase/firestore';
-
-
-async function saveSearchHistory(userId: string, question: string, answer: string) {
-    if (!userId) return;
-
-    const historyCollection = collection(db, 'searchHistory');
-    
-    // Add new history entry
-    await addDoc(historyCollection, {
-        userId,
-        question,
-        answer,
-        createdAt: serverTimestamp(),
-    });
-
-    // Enforce a limit of 5 history items
-    const q = query(
-        historyCollection,
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
-    );
-    
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.size > 5) {
-        const batch = writeBatch(db);
-        const docsToDelete = querySnapshot.docs.slice(5);
-        docsToDelete.forEach(doc => {
-            batch.delete(doc.ref);
-        });
-        await batch.commit();
-    }
-}
+import { db } from '@/lib/firebase-admin';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 
 export async function getAnswer(
-  input: (GenerateAnswerFromDocumentInput | GenerateAnswerInput) & { userId?: string }
+  input: (GenerateAnswerFromDocumentInput | GenerateAnswerInput)
 ): Promise<{ answer: string } | { error: string }> {
   try {
     let output;
@@ -51,10 +18,6 @@ export async function getAnswer(
        output = await generateAnswerFromDocument(input as GenerateAnswerFromDocumentInput);
     } else {
         output = await generateAnswer(input as GenerateAnswerInput);
-    }
-
-    if(input.userId) {
-        await saveSearchHistory(input.userId, input.question, output.answer);
     }
 
     return { answer: output.answer };
