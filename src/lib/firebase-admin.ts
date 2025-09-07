@@ -1,3 +1,4 @@
+
 "use server";
 
 import * as admin from 'firebase-admin';
@@ -10,14 +11,21 @@ const serviceAccountKey = process.env.FIREBASE_SERVICE_ACCOUNT_KEY;
 let app;
 if (!getApps().length) {
     try {
+        // Only use credentials if the service account key is provided
         const credential = serviceAccountKey 
             ? cert(JSON.parse(serviceAccountKey)) 
             : undefined;
         
-        app = initializeApp({ credential });
-    } catch(e) {
-        console.error("Failed to initialize Firebase Admin SDK", e);
-        // Fallback for environments without service account key, with limited privileges.
+        if (credential) {
+            app = initializeApp({ credential });
+        } else {
+            console.warn("FIREBASE_SERVICE_ACCOUNT_KEY not found. Initializing with default server credentials. Some admin features may be limited.");
+            app = initializeApp();
+        }
+
+    } catch(e: any) {
+        console.error("Failed to initialize Firebase Admin SDK. Error: " + e.message);
+        // Fallback for environments where initialization might fail for other reasons.
         app = initializeApp();
     }
 } else {
