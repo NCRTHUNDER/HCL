@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2 } from "lucide-react";
+import { BrainCircuit, Loader2, Paperclip, Send, X, User, Bot, Sparkles, MessageSquare, Quote, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -54,6 +54,7 @@ export function StandaloneChat() {
   const [fileName, setFileName] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [researchMode, setResearchMode] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const form = useForm<FormValues>({
@@ -88,9 +89,7 @@ export function StandaloneChat() {
     }
   }, [messages])
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+  const processFile = (file: File) => {
       setFileName(file.name);
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -103,6 +102,12 @@ export function StandaloneChat() {
         fetchSuggestions(content);
       };
       reader.readAsText(file);
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processFile(file);
     }
   };
 
@@ -130,6 +135,30 @@ export function StandaloneChat() {
         description: "The conversation has been reset.",
     });
   }
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+  
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
 
   async function onSubmit(values: FormValues) {
     const userMessage: Message = { id: `user-${Date.now()}`, text: values.question, sender: "user" };
@@ -170,7 +199,19 @@ export function StandaloneChat() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full p-4 pt-0">
+    <div 
+      className="flex flex-col h-full w-full p-4 pt-0 relative"
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      {isDragging && (
+        <div className="absolute inset-0 bg-secondary/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-primary">
+          <Upload className="h-12 w-12 text-primary mb-4" />
+          <p className="text-md font-semibold">Drop document here</p>
+        </div>
+      )}
        {messages.length > 0 && (
           <div className="flex items-center justify-end my-2">
               <Button variant="outline" size="sm" onClick={clearChat} className="gap-1.5 text-xs h-7">
