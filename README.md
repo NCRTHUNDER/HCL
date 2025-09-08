@@ -10,7 +10,7 @@ Turn any document into an **interactive knowledge base**. Upload, ask, and get t
 
 ---
 
-## 🚀 Features  
+##  Features  
 
 -**Universal Document Support** – Upload PDFs, DOCX, TXT & more with complete **encryption**.  
 -**Natural Language Queries** – Ask complex, nuanced questions in plain English.  
@@ -20,9 +20,9 @@ Turn any document into an **interactive knowledge base**. Upload, ask, and get t
 
 ---
 
-## 🛠️ How It Works  
+## How It Works  
 
-1**Upload Document**  
+**Upload Document**  
 Upload your document securely (PDF, DOCX, TXT, etc.).  
 
  **Ask Anything**  
@@ -36,7 +36,7 @@ Export conversations as **PDF/TXT** or share with your team.
 
 ---
 
-## 🧑‍💻 Tech Stack  
+##  Tech Stack  
 
 | Layer       | Technology |
 |-------------|------------|
