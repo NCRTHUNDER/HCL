@@ -68,7 +68,7 @@ Copy code
 npm run dev
 Visit 👉 http://localhost:3000
 
-Deploy easily with Vercel for production hosting.```
+Deploy easily with Vercel for production hosting.
 
 📖 Usage Example
 Upload a research paper (PDF).
@@ -79,7 +79,7 @@ Get a concise, referenced answer.
 
 Export results for sharing ✅
 
-<!-- (Optional demo screenshot) -->
+
 
 🔮 Roadmap
 📑 Multi-document support
@@ -93,5 +93,6 @@ Export results for sharing ✅
 📱 Mobile-friendly app
 
 🏆 Hackathon Context
-Built during [Hackathon Name] by [Team Name / Your Name].
+Built during HCL GUVI by NovaTech .
 Aimed at solving document overload with AI-driven insights, making research and collaboration effortless.
+Team memebers- Julius B thomas, Shamith gowda, Nevan Miranda
