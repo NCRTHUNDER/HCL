@@ -4,7 +4,9 @@
 
 Turn any document into an **interactive knowledge base**. Upload, ask, and get trusted insights — backed with references and ready to share.  
 
-![Banner](https://your-image-link-here.com/banner.png) <!-- (Optional: add screenshot or banner) -->
+<img width="1898" height="943" alt="image" src="https://github.com/user-attachments/assets/ba24fff9-11d8-4bc9-b96f-0d62efa6da7a" />
+<img width="1903" height="933" alt="image" src="https://github.com/user-attachments/assets/cc0a45a0-25f4-4853-b9f5-bb035b9efb16" />
+
 
 ---
 
@@ -66,7 +68,7 @@ Copy code
 npm run dev
 Visit 👉 http://localhost:3000
 
-Deploy easily with Vercel for production hosting.
+Deploy easily with Vercel for production hosting.```
 
 📖 Usage Example
 Upload a research paper (PDF).
