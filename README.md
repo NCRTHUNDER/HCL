@@ -12,26 +12,26 @@ Turn any document into an **interactive knowledge base**. Upload, ask, and get t
 
 ## 🚀 Features  
 
-- 📂 **Universal Document Support** – Upload PDFs, DOCX, TXT & more with complete **encryption**.  
-- 💬 **Natural Language Queries** – Ask complex, nuanced questions in plain English.  
-- 🔍 **Trusted Answers** – AI provides precise, **source-backed** responses.  
-- 🤝 **Collaboration Ready** – Export conversations or share findings instantly.  
-- 🔒 **Secure & Reliable** – Data privacy with encryption and HTTPS protocols.  
+-**Universal Document Support** – Upload PDFs, DOCX, TXT & more with complete **encryption**.  
+-**Natural Language Queries** – Ask complex, nuanced questions in plain English.  
+-**Trusted Answers** – AI provides precise, **source-backed** responses.  
+-**Collaboration Ready** – Export conversations or share findings instantly.  
+-**Secure & Reliable** – Data privacy with encryption and HTTPS protocols.  
 
 ---
 
 ## 🛠️ How It Works  
 
-1️⃣ **Upload Document**  
+1**Upload Document**  
 Upload your document securely (PDF, DOCX, TXT, etc.).  
 
-2️⃣ **Ask Anything**  
+ **Ask Anything**  
 Use **natural language queries** — no technical jargon needed.  
 
-3️⃣ **View Insights**  
+**View Insights**  
 Receive **accurate, referenced answers** pulled directly from your document.  
 
-4️⃣ **Share or Export**  
+ **Share or Export**  
 Export conversations as **PDF/TXT** or share with your team.  
 
 ---
@@ -40,15 +40,15 @@ Export conversations as **PDF/TXT** or share with your team.
 
 | Layer       | Technology |
 |-------------|------------|
-| **Frontend** | React / Next.js ⚛️ |
-| **Backend**  | Node.js / Express 🟢 |
-| **AI Engine**| GPT-4 API (or LLM of choice) 🤖 |
-| **Storage**  | Encrypted Cloud Storage 🔐 |
-| **Deployment**| Vercel ☁️ |
+| **Frontend** | React / Next.js |
+| **Backend**  | Node.js / Express |
+| **AI Engine**| GPT-4 API (or LLM of choice) |
+| **Storage**  | Encrypted Cloud Storage |
+| **Deployment**| Vercel  |
 
 ---
 
-## ⚡ Getting Started  
+##  Getting Started  
 
 Clone the repository and set up locally:
 
@@ -66,33 +66,33 @@ Run locally:
 bash
 Copy code
 npm run dev
-Visit 👉 http://localhost:3000
+Visit http://localhost:3000
 
 Deploy easily with Vercel for production hosting.
 
-📖 Usage Example
+Usage Example
 Upload a research paper (PDF).
 
 Ask: “What are the key findings in the conclusion?”
 
 Get a concise, referenced answer.
 
-Export results for sharing ✅
+Export results for sharing 
 
 
 
-🔮 Roadmap
-📑 Multi-document support
+Roadmap
+Multi-document support
 
-📊 Auto-summarization dashboard
+Auto-summarization dashboard
 
-🔑 Role-based access (Admin / Viewer)
+Role-based access (Admin / Viewer)
 
-🔌 Integrations: Slack, Notion, SharePoint
+ Integrations: Slack, Notion, SharePoint
 
-📱 Mobile-friendly app
+Mobile-friendly app
 
-🏆 Hackathon Context
+Hackathon Context
 Built during HCL GUVI by NovaTech .
 Aimed at solving document overload with AI-driven insights, making research and collaboration effortless.
 Team memebers- Julius B thomas, Shamith gowda, Nevan Miranda
