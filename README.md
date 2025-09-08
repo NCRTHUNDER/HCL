@@ -53,7 +53,7 @@ Export conversations as **PDF/TXT** or share with your team.
 Clone the repository and set up locally:
 
 ```bash
-git clone [your-repo-url]
+git clone https://github.com/NCRTHUNDER/HCL.git
 cd intituas-ai
 npm install   # or yarn install
 Set up your environment variables (.env):
